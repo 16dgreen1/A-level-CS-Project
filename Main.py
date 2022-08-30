@@ -1,6 +1,7 @@
 import pygame
 import random
 from Settings import *
+from Sprites import *
 
 
 class Game:
@@ -20,17 +21,20 @@ class Game:
 
     # updates the objects
     def update(self):
-        pass
+        self.all_sprites.update()
 
     # draws the new screen and presents it to the player
     def draw(self):
         self.win.fill(BLACK)
+        self.all_sprites.draw(self.win)
 
         # after the screen has been drawn, display it to the player
         pygame.display.flip()
 
     def new(self):
         self.running = True
+        self.all_sprites = pygame.sprite.Group()
+        self.player = Player(self, 512, 320)
         self.run()
 
     def run(self):
