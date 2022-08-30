@@ -1,9 +1,10 @@
 
 # window settings
-WIDTH = 1020
+WIDTH = 1024
 HEIGHT = 640
 
 FPS = 60
+TILESIZE = 32
 
 # colour RGB values
 RED = (255, 0, 0)
