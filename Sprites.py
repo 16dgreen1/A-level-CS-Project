@@ -10,9 +10,11 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((TILESIZE, TILESIZE))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
+        self.rect.x = x
+        self.rect.y = y
+        self.dx = 0
+        self.dy = 0
 
     def update(self):
-        self.rect.x = self.x
-        self.rect.y = self.y
+        self.rect.x += self.dx
+        self.rect.y += self.dy
