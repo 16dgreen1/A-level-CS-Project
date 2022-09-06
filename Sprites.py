@@ -16,6 +16,6 @@ class Player(pygame.sprite.Sprite):
         self.dy = 0
 
     def update(self):
-        self.rect.x += self.dx
-        self.rect.y += self.dy
+        self.rect.x += self.dx * PLAYER_SPEED
+        self.rect.y += self.dy * PLAYER_SPEED
         self.dx, self.dy = 0, 0

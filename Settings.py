@@ -3,6 +3,9 @@
 WIDTH = 1024
 HEIGHT = 640
 
+# player settings
+PLAYER_SPEED = 5
+
 FPS = 60
 TILESIZE = 32
 
