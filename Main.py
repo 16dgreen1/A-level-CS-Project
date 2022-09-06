@@ -18,6 +18,15 @@ class Game:
             if event.type == pygame.QUIT:
                 if self.running:
                     self.running = False
+        k = pygame.key.get_pressed()
+        if k[pygame.K_a]:
+            self.player.dx = -1
+        if k[pygame.K_d]:
+            self.player.dx = 1
+        if k[pygame.K_w]:
+            self.player.dy = -1
+        if k[pygame.K_s]:
+            self.player.dy = 1
 
     # updates the objects
     def update(self):
