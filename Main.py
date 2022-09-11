@@ -18,6 +18,8 @@ class Game:
             if event.type == pygame.QUIT:
                 if self.running:
                     self.running = False
+
+        # player movement
         k = pygame.key.get_pressed()
         if k[pygame.K_a]:
             self.player.dx -= 1
