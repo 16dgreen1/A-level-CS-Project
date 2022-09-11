@@ -17,12 +17,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         if self.dx in [1, -1] and self.dy in [1, -1]:
-            self.image.fill(RED)
             self.dx *= 0.7
             self.dy *= 0.7
-            print(self.dx, self.dy)
-        else:
-            self.image.fill(BLUE)
         self.rect.x += self.dx * PLAYER_SPEED
         self.rect.y += self.dy * PLAYER_SPEED
         self.dx, self.dy = 0, 0
