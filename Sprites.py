@@ -21,13 +21,12 @@ class Player(pygame.sprite.Sprite):
         x = mouse_pos_x - self.rect.x
         y = mouse_pos_y - self.rect.y
         if x != 0:
-            self.rot_angle = math.atan(-y/x)
-            self.rot_angle = math.degrees(self.rot_angle)
+            self.rot_angle = math.degrees(math.atan(-y/x))
         else:
             if mouse_pos_y < self.rect.y:
-                self.rot_angle = -90
-            else:
                 self.rot_angle = 90
+            else:
+                self.rot_angle = -90
         if mouse_pos_x < self.rect.x:
             self.rot_angle += 180
         self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
