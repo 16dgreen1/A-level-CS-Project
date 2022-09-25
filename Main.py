@@ -2,6 +2,7 @@ import pygame
 import random
 from Settings import *
 from Sprites import *
+from tilemap import *
 
 
 class Game:
@@ -36,7 +37,7 @@ class Game:
 
     # draws the new screen and presents it to the player
     def draw(self):
-        self.win.fill(BLACK)
+        self.win.blit(self.map_image, (0, 0))
         self.all_sprites.draw(self.win)
 
         # after the screen has been drawn, display it to the player
@@ -46,6 +47,9 @@ class Game:
         self.running = True
         self.all_sprites = pygame.sprite.Group()
         self.player = Player(self, 512, 320)
+        self.map = Tilemap('images\\Tilemap\\map1.tmx')
+        self.map_image = self.map.make_map()
+        self.map_rect = self.map_image.get_rect()
         self.run()
 
     def run(self):
