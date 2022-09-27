@@ -34,7 +34,6 @@ class Player(pygame.sprite.Sprite):
         # if the mouse is behind the player in terms of x
         if mouse_pos_x < self.rect.centerx:
             self.rot_angle += 180
-        print(self.rot_angle)
         # change the player
         self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
         self.rect = self.image.get_rect()
@@ -45,9 +44,30 @@ class Player(pygame.sprite.Sprite):
             self.dx *= 0.7
             self.dy *= 0.7
         self.rect.x += self.dx * PLAYER_SPEED
+        walls = pygame.sprite.spritecollide(self, self.game.walls, False)
+        if walls:
+            wall = walls[0]
+            if wall.rect.x < self.rect.x:
+                self.rect.x = wall.rect.x + wall.rect.width
+            elif wall.rect.x > self.rect.x:
+                self.rect.x = wall.rect.x - self.rect.width
         self.rect.y += self.dy * PLAYER_SPEED
         self.dx, self.dy = 0, 0
 
     def update(self):
         self.rotate()
         self.move()
+        pygame.draw.rect(self.game.win, (255, 0, 0), self.rect)
+
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height, game):
+        self.game = game
+        self.groups = game.all_sprites, game.walls
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image = pygame.Surface((width, height))
+        self.image.fill(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
