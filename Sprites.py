@@ -52,6 +52,13 @@ class Player(pygame.sprite.Sprite):
             elif wall.rect.x > self.rect.x:
                 self.rect.x = wall.rect.x - self.rect.width
         self.rect.y += self.dy * PLAYER_SPEED
+        walls = pygame.sprite.spritecollide(self, self.game.walls, False)
+        if walls:
+            wall = walls[0]
+            if wall.rect.y < self.rect.y:
+                self.rect.y = wall.rect.y + wall.rect.height
+            elif wall.rect.y > self.rect.y:
+                self.rect.y = wall.rect.y - self.rect.height
         self.dx, self.dy = 0, 0
 
     def update(self):
