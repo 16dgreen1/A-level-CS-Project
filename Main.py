@@ -46,7 +46,9 @@ class Game:
     def new(self):
         self.running = True
         self.all_sprites = pygame.sprite.Group()
+        self.walls = pygame.sprite.Group()
         self.player = Player(self, 512, 320)
+        self.wall = Wall(300, 300, 32, 32, self)
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
         self.map_rect = self.map_image.get_rect()
