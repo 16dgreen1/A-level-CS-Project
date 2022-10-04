@@ -44,22 +44,9 @@ class Player(pygame.sprite.Sprite):
         walls = pygame.sprite.spritecollide(self, self.game.walls, False)
         if walls:
             for wall in walls:
-                # finding how far the player is into the wall:
-                # find if the player is above or below the wall an use the top or bottom of the player and wall depending on the result
-                if self.rect.y < wall.rect.y:
-                    # above
-                    difference_y = wall.rect.y - self.rect.bottom
-                else:
-                    # below
-                    difference_y = wall.rect.bottom - self.rect.y
-                # find if the player is left or right of the wall and using the left or right of the player and wall depending on the result
-                if self.rect.x > wall.rect.x:
-                    # right
-                    difference_x = wall.rect.right - self.rect.x
-                else:
-                    # left
-                    difference_x = wall.rect.x - self.rect.right
-
+                # how far the player has to move in each direction to not be colliding with the wall
+                difference_y = wall.rect.y - self.rect.bottom if self.rect.y < wall.rect.y else wall.rect.bottom - self.rect.y
+                difference_x = wall.rect.x - self.rect.right if self.rect.x < wall.rect.x else wall.rect.right - self.rect.x
                 # move the player in the direction where the difference is smaller
                 if abs(difference_x) < abs(difference_y):
                     self.rect.x += difference_x
