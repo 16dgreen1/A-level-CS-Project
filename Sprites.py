@@ -6,7 +6,7 @@ import math
 class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.game = game  # a reference to the game class
-        self.groups = self.game.all_sprites  # a reference to the
+        self.groups = self.game.all_sprites  # a reference to the groups they're in
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.image_file = pygame.image.load('images\\Player\\test.png')
         self.image = self.image_file
@@ -38,6 +38,33 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
+        self.rotate_collide()
+
+    def rotate_collide(self):
+        walls = pygame.sprite.spritecollide(self, self.game.walls, False)
+        if walls:
+            for wall in walls:
+                # finding how far the player is into the wall:
+                # find if the player is above or below the wall an use the top or bottom of the player and wall depending on the result
+                if self.rect.y < wall.rect.y:
+                    # above
+                    difference_y = wall.rect.y - self.rect.bottom
+                else:
+                    # below
+                    difference_y = wall.rect.bottom - self.rect.y
+                # find if the player is left or right of the wall and using the left or right of the player and wall depending on the result
+                if self.rect.x > wall.rect.x:
+                    # right
+                    difference_x = wall.rect.right - self.rect.x
+                else:
+                    # left
+                    difference_x = wall.rect.x - self.rect.right
+
+                # move the player in the direction where the difference is smaller
+                if abs(difference_x) < abs(difference_y):
+                    self.rect.x += difference_x
+                else:
+                    self.rect.y += difference_y
 
     def move(self):
         if self.dx in [1, -1] and self.dy in [1, -1]:
@@ -64,7 +91,6 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rotate()
         self.move()
-        pygame.draw.rect(self.game.win, (255, 0, 0), self.rect)
 
 
 class Wall(pygame.sprite.Sprite):
