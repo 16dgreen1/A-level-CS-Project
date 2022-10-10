@@ -83,11 +83,6 @@ class Player(pygame.sprite.Sprite):
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, game):
         self.game = game
-        self.groups = game.all_sprites, game.walls
+        self.groups = game.walls
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image = pygame.Surface((width, height))
-        self.image.fill(BLACK)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
+        self.rect = pygame.Rect(x, y, width, height)
