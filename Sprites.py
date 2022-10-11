@@ -17,8 +17,8 @@ class Player(pygame.sprite.Sprite):
         self.rot_angle = 0
         self.dx = 0
         self.dy = 0
-        self.camerax = x - WIDTH/2
-        self.cameray = y - HEIGHT/2
+        self.camerax = -x + WIDTH/2
+        self.cameray = -y + HEIGHT/2
 
     def rotate(self):
         original_coords = self.rect.center
