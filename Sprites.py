@@ -12,9 +12,13 @@ class Player(pygame.sprite.Sprite):
         self.image = self.image_file
         self.rect = self.image.get_rect()
         self.rect.center = x, y
+        self.x = x
+        self.y = y
         self.rot_angle = 0
         self.dx = 0
         self.dy = 0
+        self.camerax = x - WIDTH/2
+        self.cameray = y - HEIGHT/2
 
     def rotate(self):
         original_coords = self.rect.center
@@ -54,6 +58,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y += difference_y
 
     def move(self):
+        originalx, originaly = self.rect.center
         if self.dx in [1, -1] and self.dy in [1, -1]:
             self.dx *= 0.7
             self.dy *= 0.7
@@ -74,6 +79,10 @@ class Player(pygame.sprite.Sprite):
             elif wall.rect.y > self.rect.y:
                 self.rect.y = wall.rect.y - self.rect.height
         self.dx, self.dy = 0, 0
+        self.camerax -= self.rect.centerx - originalx
+        self.cameray -= self.rect.centery - originaly
+        self.rect.centerx = WIDTH / 2
+        self.rect.centery = HEIGHT / 2
 
     def update(self):
         self.rotate()
@@ -86,3 +95,9 @@ class Wall(pygame.sprite.Sprite):
         self.groups = game.walls
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.rect = pygame.Rect(x, y, width, height)
+        self.x = x
+        self.y = y
+
+    def update(self, player):
+        self.rect.x = self.x + player.camerax
+        self.rect.y = self.y + player.cameray
