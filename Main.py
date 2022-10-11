@@ -33,11 +33,12 @@ class Game:
 
     # updates the objects
     def update(self):
+        self.walls.update(self.player)
         self.all_sprites.update()
 
     # draws the new screen and presents it to the player
     def draw(self):
-        self.win.blit(self.map_image, (self.player.rect.centerx - WIDTH/2, self.player.rect.centery - HEIGHT/2))
+        self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.all_sprites.draw(self.win)
 
         # after the screen has been drawn, display it to the player
