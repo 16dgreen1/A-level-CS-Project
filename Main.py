@@ -48,7 +48,10 @@ class Game:
         self.running = True
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
+        self.enemy1 = Enemy(self, 256, 256, 5, 0, 0)
+        self.enemy2 = Enemy(self, 320, 1280, 5, 0, 0)
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
         self.map_rect = self.map_image.get_rect()

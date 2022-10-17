@@ -101,3 +101,88 @@ class Wall(pygame.sprite.Sprite):
     def update(self, player):
         self.rect.x = self.x + player.camerax
         self.rect.y = self.y + player.cameray
+
+
+class Enemy(pygame.sprite.Sprite):
+
+    def __init__(self, game, x, y, speed, damage, health):
+        self.game = game
+        self.groups = game.all_sprites, game.enemies
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png").convert_alpha()
+        self.image = self.image_file
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.position_x = x
+        self.position_y = y
+        self.speed = speed
+        self.damage = damage
+        self.health = health
+        self.rot_angle = 0
+
+    def move(self):
+        dx = math.cos(math.radians(self.rot_angle))
+        dy = -(math.sin(math.radians(self.rot_angle)))
+        self.rect.x += dx * self.speed
+        collisions = pygame.sprite.spritecollide(self, self.game.walls, False) + pygame.sprite.spritecollide(self, self.game.all_sprites, False)
+        for collision in collisions:
+            if collision != self:
+                if collision.rect.x < self.rect.x:
+                    self.rect.x = collision.rect.x + collision.rect.width
+                elif collision.rect.x > self.rect.x:
+                    self.rect.x = collision.rect.x - self.rect.width
+        self.rect.y += dy * self.speed
+        collisions = pygame.sprite.spritecollide(self, self.game.walls, False) + pygame.sprite.spritecollide(self, self.game.all_sprites, False)
+        for collision in collisions:
+            if collision != self:
+                if collision.rect.y < self.rect.y:
+                    self.rect.y = collision.rect.y + collision.rect.height
+                elif collision.rect.y > self.rect.y:
+                    self.rect.y = collision.rect.y - self.rect.height
+
+    def rotate(self):
+        original_coords = self.rect.center
+        player_pos_x, player_pos_y = self.game.player.rect.center
+        # AB = b - a
+        x = player_pos_x - self.rect.centerx
+        y = player_pos_y - self.rect.centery
+        if x != 0:
+            # angle between enemy and player
+            self.rot_angle = math.degrees(math.atan(-y / x))
+        else:
+            # if the player is directly above or below (divide by 0)
+            if player_pos_y < self.rect.y:
+                self.rot_angle = 90
+            else:
+                self.rot_angle = -90
+        # if the player is behind the enemy in terms of x
+        if player_pos_x < self.rect.centerx:
+            self.rot_angle += 180
+        # change the enemy
+        self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
+        self.rect = self.image.get_rect()
+        self.rect.center = original_coords
+        self.rotate_collide()
+
+    def rotate_collide(self):
+        collisions = pygame.sprite.spritecollide(self, self.game.walls, False)
+        if collisions:
+            for collision in collisions:
+                if collision != self:
+                    # how far the enemy has to move in each direction to not be colliding with the wall/player/other enemy
+                    difference_y = collision.rect.y - self.rect.bottom if self.rect.y < collision.rect.y else collision.rect.bottom - self.rect.y
+                    difference_x = collision.rect.x - self.rect.right if self.rect.x < collision.rect.x else collision.rect.right - self.rect.x
+                    # move the enemy in the direction where the difference is smaller
+                    if abs(difference_x) < abs(difference_y):
+                        self.rect.x += difference_x
+                    else:
+                        self.rect.y += difference_y
+
+    def update(self):
+        original_pos_x, original_pos_y = self.rect.centerx, self.rect.centery
+        self.rotate()
+        self.move()
+        self.position_x += self.rect.centerx - original_pos_x
+        self.position_y += self.rect.centery - original_pos_y
+        self.rect.centerx = self.position_x + self.game.player.camerax
+        self.rect.centery = self.position_y + self.game.player.cameray
