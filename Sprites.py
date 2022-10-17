@@ -109,7 +109,7 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.groups = game.all_sprites, game.enemies
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png")
+        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png").convert_alpha()
         self.image = self.image_file
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -147,18 +147,18 @@ class Enemy(pygame.sprite.Sprite):
         x = player_pos_x - self.rect.centerx
         y = player_pos_y - self.rect.centery
         if x != 0:
-            # angle between player and mouse
+            # angle between enemy and player
             self.rot_angle = math.degrees(math.atan(-y / x))
         else:
-            # if the mouse is directly above or below (divide by 0)
+            # if the player is directly above or below (divide by 0)
             if player_pos_y < self.rect.y:
                 self.rot_angle = 90
             else:
                 self.rot_angle = -90
-        # if the mouse is behind the player in terms of x
+        # if the player is behind the enemy in terms of x
         if player_pos_x < self.rect.centerx:
             self.rot_angle += 180
-        # change the player
+        # change the enemy
         self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
@@ -179,5 +179,10 @@ class Enemy(pygame.sprite.Sprite):
                         self.rect.y += difference_y
 
     def update(self):
+        original_pos_x, original_pos_y = self.rect.centerx, self.rect.centery
         self.rotate()
         self.move()
+        self.position_x += self.rect.centerx - original_pos_x
+        self.position_y += self.rect.centery - original_pos_y
+        self.rect.centerx = self.position_x + self.game.player.camerax
+        self.rect.centery = self.position_y + self.game.player.cameray
