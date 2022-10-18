@@ -5,6 +5,7 @@ HEIGHT = 640
 
 # player settings
 PLAYER_SPEED = 5
+PLAYER_HEALTH = 1000
 
 FPS = 60
 TILESIZE = 32
