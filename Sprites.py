@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.dy = 0
         self.camerax = -x + WIDTH/2
         self.cameray = -y + HEIGHT/2
+        self.health = PLAYER_HEALTH
 
     def rotate(self):
         original_coords = self.rect.center
@@ -84,9 +85,19 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH / 2
         self.rect.centery = HEIGHT / 2
 
+    # the player gets pushed back when they get hit by an enemy
+    def hit_move(self, enemy):
+        difference_x = self.rect.centerx - enemy.rect.centerx
+        difference_y = self.rect.centery - enemy.rect.centery
+        enemy_distance = math.sqrt(difference_x**2 + difference_y**2)
+        self.dx, self.dy = 5 * (difference_x / enemy_distance), 5 * (difference_y / enemy_distance)
+        self.move()
+        self.dx, self.dy = 0, 0
+
     def update(self):
         self.rotate()
         self.move()
+        print(self.health)
 
 
 class Wall(pygame.sprite.Sprite):
@@ -121,6 +132,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rot_angle = 0
 
     def move(self):
+        hit_player = False
         dx = math.cos(math.radians(self.rot_angle))
         dy = -(math.sin(math.radians(self.rot_angle)))
         self.rect.x += dx * self.speed
@@ -131,6 +143,10 @@ class Enemy(pygame.sprite.Sprite):
                     self.rect.x = collision.rect.x + collision.rect.width
                 elif collision.rect.x > self.rect.x:
                     self.rect.x = collision.rect.x - self.rect.width
+                if collision == self.game.player:
+                    self.game.player.health -= self.damage
+                    self.game.player.hit_move(self)
+                    hit_player = True
         self.rect.y += dy * self.speed
         collisions = pygame.sprite.spritecollide(self, self.game.walls, False) + pygame.sprite.spritecollide(self, self.game.all_sprites, False)
         for collision in collisions:
@@ -139,6 +155,9 @@ class Enemy(pygame.sprite.Sprite):
                     self.rect.y = collision.rect.y + collision.rect.height
                 elif collision.rect.y > self.rect.y:
                     self.rect.y = collision.rect.y - self.rect.height
+                if collision == self.game.player and not hit_player:
+                    self.game.player.health -= self.damage
+                    self.game.player.hit_move(self)
 
     def rotate(self):
         original_coords = self.rect.center
