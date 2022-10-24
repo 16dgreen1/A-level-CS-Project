@@ -40,6 +40,7 @@ class Game:
     def draw(self):
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.all_sprites.draw(self.win)
+        self.player.draw_health_bar()
 
         # after the screen has been drawn, display it to the player
         pygame.display.flip()

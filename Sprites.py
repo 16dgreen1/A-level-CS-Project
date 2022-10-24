@@ -94,10 +94,15 @@ class Player(pygame.sprite.Sprite):
         self.move()
         self.dx, self.dy = 0, 0
 
+    def draw_health_bar(self):
+        full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
+        current_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, int(HEALTHBAR_WIDTH * self.health / PLAYER_HEALTH), HEALTHBAR_HEIGHT)
+        pygame.draw.rect(self.game.win, DARK_GREY, full_bar)
+        pygame.draw.rect(self.game.win, RED, current_bar)
+
     def update(self):
         self.rotate()
         self.move()
-        print(self.health)
 
 
 class Wall(pygame.sprite.Sprite):
