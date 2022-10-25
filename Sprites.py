@@ -60,7 +60,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y += difference_y
 
     def move(self):
-        originalx, originaly = self.rect.center
+        original_x, original_y = self.rect.center
         if self.dx in [1, -1] and self.dy in [1, -1]:
             self.dx *= 0.7
             self.dy *= 0.7
@@ -81,8 +81,8 @@ class Player(pygame.sprite.Sprite):
             elif wall.rect.y > self.rect.y:
                 self.rect.y = wall.rect.y - self.rect.height
         self.dx, self.dy = 0, 0
-        self.camerax -= self.rect.centerx - originalx
-        self.cameray -= self.rect.centery - originaly
+        self.camerax -= self.rect.centerx - original_x
+        self.cameray -= self.rect.centery - original_y
         self.rect.centerx = WIDTH / 2
         self.rect.centery = HEIGHT / 2
 
@@ -246,4 +246,3 @@ class Projectile(pygame.sprite.Sprite):
         self.y += self.dy * self.speed
         self.rect.x = self.x + self.game.player.camerax
         self.rect.y = self.y + self.game.player.cameray
-
