@@ -117,6 +117,7 @@ class Wall(pygame.sprite.Sprite):
     def update(self, player):
         self.rect.x = self.x + player.camerax
         self.rect.y = self.y + player.cameray
+        pygame.sprite.spritecollide(self, self.game.projectiles, True)
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -163,6 +164,7 @@ class Enemy(pygame.sprite.Sprite):
                 if collision == self.game.player and not hit_player:
                     self.game.player.health -= self.damage
                     self.game.player.hit_move(self)
+        bullet_collisions = pygame.sprite.spritecollide(self, self.game.projectiles, True)
 
     def rotate(self):
         original_coords = self.rect.center
@@ -210,3 +212,26 @@ class Enemy(pygame.sprite.Sprite):
         self.position_y += self.rect.centery - original_pos_y
         self.rect.centerx = self.position_x + self.game.player.camerax
         self.rect.centery = self.position_y + self.game.player.cameray
+
+
+class Projectile(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, rot_angle, speed, size):
+        self.game = game
+        self.groups = game.all_sprites, game.projectiles
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image = pygame.Surface((size, size))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.x, self.y = x, y
+        self.rot_angle = rot_angle
+        self.speed = speed
+        self.dx, self.dy = math.cos(math.radians(self.rot_angle)), -(math.sin(math.radians(self.rot_angle)))
+
+    # move forward then collide with walls and enemies
+    def update(self):
+        self.x += self.dx * self.speed
+        self.y += self.dy * self.speed
+        self.rect.x = self.x + self.game.player.camerax
+        self.rect.y = self.y + self.game.player.cameray
+
