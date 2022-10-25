@@ -34,12 +34,14 @@ class Game:
     # updates the objects
     def update(self):
         self.walls.update(self.player)
+        self.projectiles.update()
         self.all_sprites.update()
 
     # draws the new screen and presents it to the player
     def draw(self):
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.all_sprites.draw(self.win)
+        self.projectiles.draw(self.win)
         self.player.draw_health_bar()
 
         # after the screen has been drawn, display it to the player
@@ -47,13 +49,14 @@ class Game:
 
     def new(self):
         self.running = True
+        self.mouse_down = False
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
         self.enemy_list = [Enemy(self, 256, 256, 2, 5, 0), Enemy(self, 320, 1280, 3, 5, 0)]
-        self.bullet = Projectile(self, 672, 736, 0, 3, 5)
+        self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
         self.map_rect = self.map_image.get_rect()

@@ -20,6 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.camerax = -x + WIDTH/2
         self.cameray = -y + HEIGHT/2
         self.health = PLAYER_HEALTH
+        self.cooldown = 0
 
     def rotate(self):
         original_coords = self.rect.center
@@ -100,9 +101,17 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(self.game.win, DARK_GREY, full_bar)
         pygame.draw.rect(self.game.win, RED, current_bar)
 
+    def shoot(self):
+        if self.cooldown <= 0:
+            self.game.projectiles_list.append(Projectile(self.game, WIDTH/2, HEIGHT/2, self.rot_angle, 10, 5))
+            self.cooldown = 20
+
     def update(self):
         self.rotate()
         self.move()
+        self.cooldown -= 1 if self.cooldown > 0 else 0
+        if pygame.mouse.get_pressed()[0]:
+            self.shoot()
 
 
 class Wall(pygame.sprite.Sprite):
@@ -217,13 +226,12 @@ class Enemy(pygame.sprite.Sprite):
 class Projectile(pygame.sprite.Sprite):
     def __init__(self, game, x, y, rot_angle, speed, size):
         self.game = game
-        self.groups = game.all_sprites, game.projectiles
+        self.groups = game.projectiles
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.image = pygame.Surface((size, size))
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
-        self.x, self.y = x, y
+        self.x, self.y = x - self.game.player.camerax, y - self.game.player.cameray
         self.rot_angle = rot_angle
         self.speed = speed
         self.dx, self.dy = math.cos(math.radians(self.rot_angle)), -(math.sin(math.radians(self.rot_angle)))
