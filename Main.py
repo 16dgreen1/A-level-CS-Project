@@ -55,7 +55,7 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 2, 5, 0), Enemy(self, 320, 1280, 3, 5, 0)]
+        self.enemy_list = [Enemy(self, 256, 256, 2, 5, 10), Enemy(self, 320, 1280, 3, 5, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()

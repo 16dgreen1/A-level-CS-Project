@@ -103,7 +103,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.cooldown <= 0:
-            self.game.projectiles_list.append(Projectile(self.game, WIDTH/2, HEIGHT/2, self.rot_angle, 10, 5))
+            self.game.projectiles_list.append(Projectile(self.game, WIDTH/2, HEIGHT/2, self.rot_angle, 10, 5, 1))
             self.cooldown = 20
 
     def update(self):
@@ -174,6 +174,11 @@ class Enemy(pygame.sprite.Sprite):
                     self.game.player.health -= self.damage
                     self.game.player.hit_move(self)
         bullet_collisions = pygame.sprite.spritecollide(self, self.game.projectiles, True)
+        if bullet_collisions:
+            for bullet in bullet_collisions:
+                self.health -= bullet.damage
+                if self.health <= 0:
+                    self.kill()
 
     def rotate(self):
         original_coords = self.rect.center
@@ -224,7 +229,7 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, rot_angle, speed, size):
+    def __init__(self, game, x, y, rot_angle, speed, size, damage):
         self.game = game
         self.groups = game.projectiles
         pygame.sprite.Sprite.__init__(self, self.groups)
@@ -234,6 +239,7 @@ class Projectile(pygame.sprite.Sprite):
         self.x, self.y = x - self.game.player.camerax, y - self.game.player.cameray
         self.rot_angle = rot_angle
         self.speed = speed
+        self.damage = damage
         self.dx, self.dy = math.cos(math.radians(self.rot_angle)), -(math.sin(math.radians(self.rot_angle)))
 
     # move forward then collide with walls and enemies
