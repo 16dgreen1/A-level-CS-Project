@@ -20,6 +20,10 @@ class Game:
                 if self.running:
                     self.running = False
 
+        # making the player shoot whenever the mouse is being clicked
+        if pygame.mouse.get_pressed()[0]:
+            self.player.shoot()
+
         # player movement
         k = pygame.key.get_pressed()
         if k[pygame.K_a]:

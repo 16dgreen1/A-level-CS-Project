@@ -110,8 +110,6 @@ class Player(pygame.sprite.Sprite):
         self.rotate()
         self.move()
         self.cooldown -= 1 if self.cooldown > 0 else 0
-        if pygame.mouse.get_pressed()[0]:
-            self.shoot()
 
 
 class Wall(pygame.sprite.Sprite):
