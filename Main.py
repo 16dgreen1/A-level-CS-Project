@@ -39,8 +39,8 @@ class Game:
 
     # updates the objects
     def update(self):
-        self.walls.update(self.player)
         self.projectiles.update()
+        self.walls.update(self.player)
         self.all_sprites.update()
 
     # draws the new screen and presents it to the player
