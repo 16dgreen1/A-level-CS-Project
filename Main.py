@@ -23,7 +23,7 @@ class Game:
                     self.running = False
 
         # making the player shoot whenever the mouse is being clicked
-        if pygame.mouse.get_pressed()[0]:
+        if pygame.mouse.get_pressed(5)[0]:
             self.player.shoot()
 
         # player movement
@@ -52,7 +52,7 @@ class Game:
 
         # after the screen has been drawn, display it to the player
         pygame.display.flip()
-
+preperation = 0
     def new(self):
         self.running = True
         self.mouse_down = False
@@ -61,7 +61,7 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 2, 5, 10), Enemy(self, 320, 1280, 3, 5, 10)]
+        self.enemy_list = [Enemy(self, 256, 256, 3, 25, 10), Enemy(self, 320, 1280, 4, 25, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
