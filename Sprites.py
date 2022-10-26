@@ -21,6 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.cameray = -y + HEIGHT/2
         self.health = PLAYER_HEALTH
         self.cooldown = 0
+        self.currency = 0
 
     def rotate(self):
         original_coords = self.rect.center
@@ -95,11 +96,22 @@ class Player(pygame.sprite.Sprite):
         self.move()
         self.dx, self.dy = 0, 0
 
+    def draw_hud(self):
+        self.draw_health_bar()
+        self.draw_currency()
+
     def draw_health_bar(self):
         full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
         current_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, int(HEALTHBAR_WIDTH * self.health / PLAYER_HEALTH), HEALTHBAR_HEIGHT)
         pygame.draw.rect(self.game.win, DARK_GREY, full_bar)
         pygame.draw.rect(self.game.win, RED, current_bar)
+
+    def draw_currency(self):
+        currency_text = self.game.font.render("x {}".format(self.currency), True, BLACK)
+        currency_rect = currency_text.get_rect()
+        currency_rect.topleft = (CURRENCY_X, CURRENCY_Y)
+        self.game.win.blit(currency_text, currency_rect)
+        pygame.draw.circle(self.game.win, YELLOW, COIN_POS, 7.5)
 
     def shoot(self):
         if self.cooldown <= 0:
@@ -175,7 +187,9 @@ class Enemy(pygame.sprite.Sprite):
         if bullet_collisions:
             for bullet in bullet_collisions:
                 self.health -= bullet.damage
+                self.game.player.currency += CURRENCY_ON_HIT
                 if self.health <= 0:
+                    self.game.player.currency += CURRENCY_ON_DEATH
                     self.kill()
 
     def rotate(self):

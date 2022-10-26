@@ -9,8 +9,10 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
+        pygame.font.init()
         self.win = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont("calibri", 24)
 
     # handles events such as key presses
     def events(self):
@@ -46,7 +48,7 @@ class Game:
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
-        self.player.draw_health_bar()
+        self.player.draw_hud()
 
         # after the screen has been drawn, display it to the player
         pygame.display.flip()
