@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.game = game  # a reference to the game class
         self.groups = self.game.all_sprites  # a reference to the groups they're in
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image_file = pygame.image.load('images\\Player\\test.png')
+        self.image_file = pygame.image.load('images\\Player\\test.png').convert_alpha()  # TODO make an actual sprite for the player
         self.image = self.image_file
         self.rect = self.image.get_rect()
         self.rect.center = x, y
@@ -17,8 +17,8 @@ class Player(pygame.sprite.Sprite):
         self.rot_angle = 0
         self.dx = 0
         self.dy = 0
-        self.camerax = -x + WIDTH/2
-        self.cameray = -y + HEIGHT/2
+        self.camerax = -x + WIDTH / 2
+        self.cameray = -y + HEIGHT / 2
         self.health = PLAYER_HEALTH
         self.cooldown = 0
         self.currency = 0
@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         y = mouse_pos_y - self.rect.centery
         if x != 0:
             # angle between player and mouse
-            self.rot_angle = math.degrees(math.atan(-y/x))
+            self.rot_angle = math.degrees(math.atan(-y / x))
         else:
             # if the mouse is directly above or below (divide by 0)
             if mouse_pos_y < self.rect.y:
@@ -91,7 +91,7 @@ class Player(pygame.sprite.Sprite):
     def hit_move(self, enemy):
         difference_x = self.rect.centerx - enemy.rect.centerx
         difference_y = self.rect.centery - enemy.rect.centery
-        enemy_distance = math.sqrt(difference_x**2 + difference_y**2)
+        enemy_distance = math.sqrt(difference_x ** 2 + difference_y ** 2)
         self.dx, self.dy = 5 * (difference_x / enemy_distance), 5 * (difference_y / enemy_distance)
         self.move()
         self.dx, self.dy = 0, 0
@@ -115,7 +115,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.cooldown <= 0:
-            self.game.projectiles_list.append(Projectile(self.game, WIDTH/2, HEIGHT/2, self.rot_angle, 10, 5, 1))
+            self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 10, 5, 1))
             self.cooldown = 20
 
     def update(self):
@@ -145,7 +145,7 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.groups = game.all_sprites, game.enemies
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png").convert_alpha()
+        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png").convert_alpha()  # TODO make an actual sprite for the enemy
         self.image = self.image_file
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
