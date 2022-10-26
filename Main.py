@@ -52,7 +52,7 @@ class Game:
 
         # after the screen has been drawn, display it to the player
         pygame.display.flip()
-preperation = 0
+
     def new(self):
         self.running = True
         self.mouse_down = False
