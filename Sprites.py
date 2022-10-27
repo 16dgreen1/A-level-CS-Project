@@ -122,6 +122,8 @@ class Player(pygame.sprite.Sprite):
         self.rotate()
         self.move()
         self.cooldown -= 1 if self.cooldown > 0 else 0
+        if self.health <= 0:
+            self.game.playing = False
 
 
 class Wall(pygame.sprite.Sprite):
