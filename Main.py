@@ -2,6 +2,7 @@ import pygame
 import random
 from Settings import *
 from Sprites import *
+from Menu import *
 from tilemap import *
 
 
@@ -14,13 +15,45 @@ class Game:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("calibri", 24)
 
+    def new_menu(self):
+        self.buttons = pygame.sprite.Group()
+        self.start_button = Button(self, "images\\Menu\\Start Button\\start button idle.png", "images\\Menu\\Start Button\\start button hover.png", 100, 100)
+        self.main_menu()
+
+    def main_menu(self):
+        self.menu_open = True
+        while self.menu_open:
+            self.menu_events()
+            self.menu_update()
+            self.menu_draw()
+
+    def menu_events(self):
+        for event in pygame.event.get():
+            # check if the x has been pressed then close the window if it has
+            if event.type == pygame.QUIT:
+                if self.running:
+                    self.running, self.playing = False, False
+
+        if self.start_button.is_pressed():
+            self.menu_open = False
+
+    def menu_update(self):
+        self.buttons.update()
+
+    def menu_draw(self):
+        self.win.fill(BLACK)
+        self.buttons.draw(self.win)
+
+        # flip teh screen once everything has drawn
+        pygame.display.flip()
+
     # handles events such as key presses
     def events(self):
         for event in pygame.event.get():
             # check if the x has been pressed then close the window if it has
             if event.type == pygame.QUIT:
                 if self.running:
-                    self.running = False
+                    self.running, self.playing = False, False
 
         # making the player shoot whenever the mouse is being clicked
         if pygame.mouse.get_pressed(5)[0]:
@@ -54,7 +87,6 @@ class Game:
         pygame.display.flip()
 
     def new(self):
-        self.running = True
         self.mouse_down = False
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
@@ -72,7 +104,7 @@ class Game:
         self.run()
 
     def run(self):
-        while self.running:
+        while self.playing:
             self.clock.tick(FPS)
             self.events()
             self.update()
@@ -80,6 +112,7 @@ class Game:
 
 
 g = Game()
-g.running = True
+g.running, g.playing = True, True
 while g.running:
+    g.new_menu()
     g.new()

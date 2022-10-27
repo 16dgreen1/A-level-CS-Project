@@ -48,7 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.rotate_collide()
 
     def rotate_collide(self):
-        walls = pygame.sprite.spritecollide(self, self.game.walls, False)
+        walls = pygame.sprite.spritecollide(self, self.game.walls, False)  # TODO circle collision, see if it fixes the weird collision
         if walls:
             for wall in walls:
                 # how far the player has to move in each direction to not be colliding with the wall
