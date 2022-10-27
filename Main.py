@@ -9,8 +9,10 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
+        pygame.font.init()
         self.win = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont("calibri", 24)
 
     # handles events such as key presses
     def events(self):
@@ -21,7 +23,7 @@ class Game:
                     self.running = False
 
         # making the player shoot whenever the mouse is being clicked
-        if pygame.mouse.get_pressed()[0]:
+        if pygame.mouse.get_pressed(5)[0]:
             self.player.shoot()
 
         # player movement
@@ -37,8 +39,8 @@ class Game:
 
     # updates the objects
     def update(self):
-        self.walls.update(self.player)
         self.projectiles.update()
+        self.walls.update(self.player)
         self.all_sprites.update()
 
     # draws the new screen and presents it to the player
@@ -46,7 +48,7 @@ class Game:
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
-        self.player.draw_health_bar()
+        self.player.draw_hud()
 
         # after the screen has been drawn, display it to the player
         pygame.display.flip()
@@ -59,7 +61,7 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 2, 5, 10), Enemy(self, 320, 1280, 3, 5, 10)]
+        self.enemy_list = [Enemy(self, 256, 256, 3, 25, 10), Enemy(self, 320, 1280, 4, 25, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()

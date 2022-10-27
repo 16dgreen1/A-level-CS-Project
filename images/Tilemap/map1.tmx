@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="128" height="160" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="244">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="128" height="160" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="265">
  <tileset firstgid="1" source="jawbreaker_tiles.tsx"/>
  <layer id="3" name="Grass" width="128" height="160">
   <data encoding="csv">
@@ -578,12 +578,12 @@
   <object id="103" name="Door" x="1376" y="1824" width="64" height="32"/>
   <object id="108" name="Door" x="1216" y="2048" width="32" height="64"/>
   <object id="109" name="Door" x="1568" y="2048" width="32" height="64"/>
-  <object id="116" name="Wall" x="192" y="192" width="3712" height="32"/>
-  <object id="118" name="Wall" x="192" y="4896" width="3712" height="32"/>
+  <object id="116" name="Wall" x="224" y="192" width="3648" height="32"/>
+  <object id="118" name="Wall" x="224" y="4896" width="3648" height="32"/>
   <object id="119" name="Wall" x="192" y="192" width="32" height="4736"/>
   <object id="120" name="Wall" x="3872" y="192" width="32" height="4736"/>
-  <object id="122" name="Wall" x="2592" y="2560" width="1312" height="32"/>
-  <object id="123" name="Wall" x="192" y="2560" width="2336" height="32"/>
+  <object id="122" name="Wall" x="2592" y="2560" width="1280" height="32"/>
+  <object id="123" name="Wall" x="224" y="2560" width="2304" height="32"/>
   <object id="124" name="Door" x="2528" y="2560" width="64" height="32"/>
   <object id="125" name="Wall" x="384" y="2784" width="32" height="32"/>
   <object id="126" name="Wall" x="640" y="3040" width="32" height="32"/>
@@ -690,5 +690,9 @@
   <object id="238" name="Wall" x="480" y="4320" width="32" height="32"/>
   <object id="239" name="Wall" x="1056" y="4320" width="32" height="32"/>
   <object id="240" name="Door" x="1184" y="3744" width="32" height="64"/>
+  <object id="259" name="Out of bounds" x="0" y="0" width="4096" height="192"/>
+  <object id="260" name="Out of bounds" x="0" y="4928" width="4096" height="192"/>
+  <object id="262" name="Out of bounds" x="0" y="192" width="192" height="4736"/>
+  <object id="263" name="Out of bounds" x="3904" y="192" width="192" height="4736"/>
  </objectgroup>
 </map>
