@@ -1,11 +1,22 @@
 
 # window settings
+import pygame.image
+
 WIDTH = 1024
 HEIGHT = 640
 
 # menu settings
 START_BUTTON_IMAGES = ["images\\Menu\\Start Button\\start button idle.png", "images\\Menu\\Start Button\\start button hover.png"]
+START_BUTTON_POS = (WIDTH/2, 320)
 QUIT_BUTTON_IMAGES = ["images\\Menu\\Quit Button\\quit button idle.png", "images\\Menu\\Quit Button\\quit button hover.png"]
+QUIT_BUTTON_POS = (WIDTH/2, 470)
+QUIT_POPUP_HEIGHT = 200
+QUIT_POPUP_WIDTH = 440
+QUIT_TEXT_POS = (WIDTH/2, 260)
+YES_BUTTON_IMAGES = ["images\\Menu\\Quit popup\\Yes button\\yes button idle.png", "images\\Menu\\Quit popup\\Yes button\\yes button hover.png"]
+YES_BUTTON_POS = (387, 370)
+NO_BUTTON_IMAGES = ["images\\Menu\\Quit popup\\No button\\no button idle.png", "images\\Menu\\Quit popup\\No button\\no button hover.png"]
+NO_BUTTON_POS = (637, 370)
 
 # player settings
 PLAYER_SPEED = 5
