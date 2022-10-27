@@ -3,6 +3,10 @@
 WIDTH = 1024
 HEIGHT = 640
 
+# menu settings
+START_BUTTON_IMAGES = ["images\\Menu\\Start Button\\start button idle.png", "images\\Menu\\Start Button\\start button hover.png"]
+QUIT_BUTTON_IMAGES = ["images\\Menu\\Quit Button\\quit button idle.png", "images\\Menu\\Quit Button\\quit button hover.png"]
+
 # player settings
 PLAYER_SPEED = 5
 PLAYER_HEALTH = 1000

@@ -17,7 +17,8 @@ class Game:
 
     def new_menu(self):
         self.buttons = pygame.sprite.Group()
-        self.start_button = Button(self, "images\\Menu\\Start Button\\start button idle.png", "images\\Menu\\Start Button\\start button hover.png", 100, 100)
+        self.start_button = Button(self, START_BUTTON_IMAGES, WIDTH/2, HEIGHT/2)
+        self.quit_button = Button(self, QUIT_BUTTON_IMAGES, WIDTH/2, HEIGHT/2 + 150)
         self.main_menu()
 
     def main_menu(self):
@@ -32,8 +33,13 @@ class Game:
             # check if the x has been pressed then close the window if it has
             if event.type == pygame.QUIT:
                 if self.running:
-                    self.running, self.playing = False, False
+                    self.running, self.menu_open = False, False
 
+        # if the quit button is pressed, close the window
+        if self.quit_button.is_pressed():
+            self.running, self.menu_open = False, False
+
+        # if the start button is pressed, close the menu
         if self.start_button.is_pressed():
             self.menu_open = False
 
@@ -104,6 +110,7 @@ class Game:
         self.run()
 
     def run(self):
+        self.playing = True if self.running else False
         while self.playing:
             self.clock.tick(FPS)
             self.events()
@@ -112,7 +119,7 @@ class Game:
 
 
 g = Game()
-g.running, g.playing = True, True
+g.running = True
 while g.running:
     g.new_menu()
     g.new()
