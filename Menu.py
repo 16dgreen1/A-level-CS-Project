@@ -14,15 +14,21 @@ class Button(pygame.sprite.Sprite):
         self.rect.center = pos
 
     def update(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_x, mouse_y):
+        if self.is_hover():
             self.image = self.hover_image
         else:
             self.image = self.idle_image
 
     def is_pressed(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        if (self.rect.collidepoint(mouse_x, mouse_y)) and pygame.mouse.get_pressed(3)[0]:
+        if self.rect.collidepoint(mouse_x, mouse_y) and pygame.mouse.get_pressed(5)[0]:
+            return True
+        else:
+            return False
+
+    def is_hover(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_x, mouse_y):
             return True
         else:
             return False
@@ -51,12 +57,14 @@ class Popup:
             if event.type == pygame.QUIT:
                 if self.game.running:
                     self.game.running, self.game.playing, self.game.popup_open, self.game.menu_open = False, False, False, False
+            # check if the mouse has been clicked and check which button, if any has bee clicked
+            if event.type == pygame.MOUSEBUTTONUP:
 
-        if self.no_button.is_pressed():
-            self.no_pressed = True
+                if self.no_button.is_hover():
+                    self.no_pressed = True
 
-        if self.yes_button.is_pressed():
-            self.yes_pressed = True
+                if self.yes_button.is_hover():
+                    self.yes_pressed = True
 
     def menu_update(self):
         self.buttons.update()

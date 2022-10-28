@@ -32,13 +32,16 @@ class Game:
                 if self.running:
                     self.running, self.menu_open = False, False
 
-        # if the quit button is pressed, close the window
-        if self.quit_button.is_pressed():
-            self.quit_menu()
+            # check if th mouse has been clicked and then check what button, if any has been pressed
+            if event.type == pygame.MOUSEBUTTONUP:
 
-        # if the start button is pressed, close the menu
-        if self.start_button.is_pressed():
-            self.menu_open = False
+                # if the quit button is pressed, close the window
+                if self.quit_button.is_hover():
+                    self.quit_menu()
+
+                # if the start button is pressed, close the menu
+                if self.start_button.is_hover():
+                    self.menu_open = False
 
     def menu_update(self):
         self.buttons.update()
