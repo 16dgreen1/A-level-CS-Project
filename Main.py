@@ -15,13 +15,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("calibri", 24)
 
-    def new_menu(self):
+    def main_menu(self):
         self.buttons = pygame.sprite.Group()
         self.start_button = Button(self, self.buttons, START_BUTTON_IMAGES, START_BUTTON_POS)
         self.quit_button = Button(self, self.buttons, QUIT_BUTTON_IMAGES, QUIT_BUTTON_POS)
-        self.main_menu()
-
-    def main_menu(self):
         self.menu_open = True
         while self.menu_open:
             self.menu_events()
@@ -160,5 +157,5 @@ class Game:
 g = Game()
 g.running = True
 while g.running:
-    g.new_menu()
+    g.main_menu()
     g.new()
