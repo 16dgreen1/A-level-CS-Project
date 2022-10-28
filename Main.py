@@ -32,7 +32,7 @@ class Game:
                 if self.running:
                     self.running, self.menu_open = False, False
 
-            # check if the mouse has been clicked and then check what button, if any has been pressed
+            # check if the mouse has been clicked and then check what button, if any the mouse is above
             if event.type == pygame.MOUSEBUTTONUP:
 
                 # if the quit button is pressed, close the window
@@ -64,13 +64,13 @@ class Game:
                 self.popup_open = False
 
     def pause_menu(self):
-        self.pause_popup = Popup(self, "Paused", POPUP_QUIT_BUTTON_IMAGES, RESUME_BUTTON_IMAGES)
+        self.pause_popup = Popup(self, "Paused", RESUME_BUTTON_IMAGES, POPUP_QUIT_BUTTON_IMAGES)
         self.popup_open = True
         while self.popup_open:
             self.pause_popup.menu_loop()
-            if self.pause_popup.yes_pressed:
-                self.playing, self.menu_open, self.popup_open = False, False, False
             if self.pause_popup.no_pressed:
+                self.playing, self.menu_open, self.popup_open = False, False, False
+            if self.pause_popup.yes_pressed:
                 self.popup_open = False
 
     # handles events such as key presses
