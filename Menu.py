@@ -19,13 +19,6 @@ class Button(pygame.sprite.Sprite):
         else:
             self.image = self.idle_image
 
-    def is_pressed(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_x, mouse_y) and pygame.mouse.get_pressed(5)[0]:
-            return True
-        else:
-            return False
-
     def is_hover(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_x, mouse_y):
