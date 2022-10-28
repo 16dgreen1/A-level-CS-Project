@@ -32,7 +32,7 @@ class Game:
                 if self.running:
                     self.running, self.menu_open = False, False
 
-            # check if th mouse has been clicked and then check what button, if any has been pressed
+            # check if the mouse has been clicked and then check what button, if any has been pressed
             if event.type == pygame.MOUSEBUTTONUP:
 
                 # if the quit button is pressed, close the window
