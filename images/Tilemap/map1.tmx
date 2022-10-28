@@ -569,7 +569,6 @@
   <object id="93" name="Wall" x="1312" y="1760" width="32" height="32"/>
   <object id="94" name="Wall" x="1472" y="1760" width="32" height="32"/>
   <object id="95" name="Wall" x="1504" y="1696" width="32" height="32"/>
-  <object id="96" x="1602.67" y="2373.33" height="1.33333"/>
   <object id="97" name="Wall" x="1216" y="2112" width="32" height="32"/>
   <object id="98" name="Wall" x="1568" y="2112" width="32" height="32"/>
   <object id="99" name="Door" x="800" y="704" width="32" height="64"/>
@@ -609,7 +608,7 @@
   <object id="147" name="Wall" x="3776" y="4320" width="32" height="480"/>
   <object id="148" name="Wall" x="3520" y="4448" width="32" height="352"/>
   <object id="149" name="Door" x="2528" y="3648" width="64" height="32"/>
-  <object id="150" name="Door" x="3168" y="4064" width="32" height="64" rotation="180"/>
+  <object id="150" name="Door" x="3136" y="4000" width="32" height="64"/>
   <object id="151" name="Door" x="2720" y="4384" width="32" height="64"/>
   <object id="153" name="Door" x="2208" y="4032" width="32" height="64"/>
   <object id="155" name="Wall" x="3360" y="4384" width="32" height="32"/>
