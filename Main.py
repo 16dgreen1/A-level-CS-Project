@@ -15,13 +15,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("calibri", 24)
 
-    def new_menu(self):
+    def main_menu(self):
         self.buttons = pygame.sprite.Group()
         self.start_button = Button(self, self.buttons, START_BUTTON_IMAGES, START_BUTTON_POS)
-        self.quit_button = Button(self, self.buttons, QUIT_BUTTON_IMAGES, QUIT_BUTTON_POS)
-        self.main_menu()
-
-    def main_menu(self):
+        self.quit_button = Button(self, self.buttons, MAIN_QUIT_BUTTON_IMAGES, MAIN_QUIT_BUTTON_POS)
         self.menu_open = True
         while self.menu_open:
             self.menu_events()
@@ -35,13 +32,16 @@ class Game:
                 if self.running:
                     self.running, self.menu_open = False, False
 
-        # if the quit button is pressed, close the window
-        if self.quit_button.is_pressed():
-            self.menu_quit()
+            # check if the mouse has been clicked and then check what button, if any the mouse is above
+            if event.type == pygame.MOUSEBUTTONUP:
 
-        # if the start button is pressed, close the menu
-        if self.start_button.is_pressed():
-            self.menu_open = False
+                # if the quit button is pressed, close the window
+                if self.quit_button.is_hover():
+                    self.quit_menu()
+
+                # if the start button is pressed, close the menu
+                elif self.start_button.is_hover():
+                    self.menu_open = False
 
     def menu_update(self):
         self.buttons.update()
@@ -53,44 +53,25 @@ class Game:
         # flip teh screen once everything has drawn
         pygame.display.flip()
 
-    def menu_quit(self):
-        self.menu_popup = pygame.Surface((QUIT_POPUP_WIDTH, QUIT_POPUP_HEIGHT))
-        self.menu_popup.fill(DARK_GREY)
-        self.quit_buttons = pygame.sprite.Group()
-        self.yes_button = Button(self, self.quit_buttons, YES_BUTTON_IMAGES, YES_BUTTON_POS)
-        self.no_button = Button(self, self.quit_buttons, NO_BUTTON_IMAGES, NO_BUTTON_POS)
-        self.menu_quit_open = True
-        while self.menu_quit_open:
-            self.quit_menu_events()
-            self.quit_menu_update()
-            self.quit_menu_draw()
+    def quit_menu(self):
+        self.quit_popup = Popup(self, "Are you sure you want to quit?", NO_BUTTON_IMAGES, YES_BUTTON_IMAGES)
+        self.popup_open = True
+        while self.popup_open:
+            self.quit_popup.menu_loop()
+            if self.quit_popup.yes_pressed:
+                self.running, self.playing, self.menu_open, self.popup_open = False, False, False, False
+            if self.quit_popup.no_pressed:
+                self.popup_open = False
 
-    def quit_menu_events(self):
-        for event in pygame.event.get():
-            # check if the x has been pressed then close the window if it has
-            if event.type == pygame.QUIT:
-                if self.running:
-                    self.running, self.playing, self.menu_open, self.menu_quit_open = False, False, False, False
-
-        if self.no_button.is_pressed():
-            self.menu_quit_open = False
-
-        if self.yes_button.is_pressed():
-            self.running, self.menu_open, self.menu_quit_open = False, False, False
-
-    def quit_menu_update(self):
-        self.quit_buttons.update()
-
-    def quit_menu_draw(self):
-        self.win.blit(self.menu_popup, (WIDTH/2 - QUIT_POPUP_WIDTH/2, HEIGHT/2 - QUIT_POPUP_HEIGHT/2))
-        self.quit_buttons.draw(self.win)
-        quit_text = self.font.render("Are you sure you want to quit?", True, RED)
-        quit_text_rect = quit_text.get_rect()
-        quit_text_rect.center = QUIT_TEXT_POS
-        self.win.blit(quit_text, quit_text_rect)
-
-        # flip the screen after drawing
-        pygame.display.flip()
+    def pause_menu(self):
+        self.pause_popup = Popup(self, "Paused", RESUME_BUTTON_IMAGES, POPUP_QUIT_BUTTON_IMAGES)
+        self.popup_open = True
+        while self.popup_open:
+            self.pause_popup.menu_loop()
+            if self.pause_popup.no_pressed:
+                self.playing, self.menu_open, self.popup_open = False, False, False
+            if self.pause_popup.yes_pressed:
+                self.popup_open = False
 
     # handles events such as key presses
     def events(self):
@@ -114,6 +95,8 @@ class Game:
             self.player.dy -= 1
         if k[pygame.K_s]:
             self.player.dy += 1
+        if k[pygame.K_ESCAPE]:
+            self.pause_menu()
 
     # updates the objects
     def update(self):
@@ -138,7 +121,7 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 3, 25, 10), Enemy(self, 320, 1280, 4, 25, 10)]
+        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10), Enemy(self, 296, 256, 4, 25, 10), Enemy(self, 336, 256, 4, 25, 10), Enemy(self, 376, 256, 4, 25, 10), Enemy(self, 416, 256, 4, 25, 10), Enemy(self, 360, 1280, 4, 25, 10), Enemy(self, 400, 1280, 4, 25, 10), Enemy(self, 440, 1280, 4, 25, 10), Enemy(self, 480, 1280, 4, 25, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
@@ -160,5 +143,5 @@ class Game:
 g = Game()
 g.running = True
 while g.running:
-    g.new_menu()
+    g.main_menu()
     g.new()
