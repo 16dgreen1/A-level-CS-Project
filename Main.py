@@ -60,6 +60,16 @@ class Game:
             if self.quit_popup.no_pressed:
                 self.popup_open = False
 
+    def pause_menu(self):
+        self.pause_popup = Popup(self, "Paused", POPUP_QUIT_BUTTON_IMAGES, RESUME_BUTTON_IMAGES)
+        self.popup_open = True
+        while self.popup_open:
+            self.pause_popup.menu_loop()
+            if self.pause_popup.yes_pressed:
+                self.running, self.playing, self.menu_open, self.popup_open = False, False, False, False
+            if self.pause_popup.no_pressed:
+                self.popup_open = False
+
     # handles events such as key presses
     def events(self):
         for event in pygame.event.get():
@@ -83,7 +93,7 @@ class Game:
         if k[pygame.K_s]:
             self.player.dy += 1
         if k[pygame.K_ESCAPE]:
-            self.quit_menu()
+            self.pause_menu()
 
     # updates the objects
     def update(self):
