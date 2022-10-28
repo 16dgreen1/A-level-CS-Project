@@ -26,3 +26,48 @@ class Button(pygame.sprite.Sprite):
             return True
         else:
             return False
+
+
+class Popup:
+    def __init__(self, game, text, no_button_images, yes_button_images):
+        self.game = game
+        self.text = text
+        self.buttons = pygame.sprite.Group()
+        self.no_button = Button(self.game, self.buttons, no_button_images, NO_BUTTON_POS)
+        self.yes_button = Button(self.game, self.buttons, yes_button_images, YES_BUTTON_POS)
+        self.popup_background = pygame.Surface((POPUP_WIDTH, POPUP_HEIGHT))
+        self.popup_background.fill(DARK_GREY)
+        self.yes_pressed = False
+        self.no_pressed = False
+
+    def menu_loop(self):
+        self.menu_events()
+        self.menu_update()
+        self.menu_draw()
+
+    def menu_events(self):
+        for event in pygame.event.get():
+            # check if the x has been pressed then close the window if it has
+            if event.type == pygame.QUIT:
+                if self.game.running:
+                    self.game.running, self.game.playing, self.game.popup_open, self.game.menu_open = False, False, False, False
+
+        if self.no_button.is_pressed():
+            self.no_pressed = True
+
+        if self.yes_button.is_pressed():
+            self.yes_pressed = True
+
+    def menu_update(self):
+        self.buttons.update()
+
+    def menu_draw(self):
+        self.game.win.blit(self.popup_background, (WIDTH/2 - POPUP_WIDTH/2, HEIGHT/2 - POPUP_HEIGHT/2))
+        self.buttons.draw(self.game.win)
+        popup_text = self.game.font.render(self.text, True, RED)
+        popup_text_rect = popup_text.get_rect()
+        popup_text_rect.center = POPUP_TEXT_POS
+        self.game.win.blit(popup_text, popup_text_rect)
+
+        # after drawing objects, flip te screen
+        pygame.display.flip()
