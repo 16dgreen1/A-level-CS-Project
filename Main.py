@@ -40,7 +40,7 @@ class Game:
                     self.quit_menu()
 
                 # if the start button is pressed, close the menu
-                if self.start_button.is_hover():
+                elif self.start_button.is_hover():
                     self.menu_open = False
 
     def menu_update(self):
@@ -69,7 +69,7 @@ class Game:
         while self.popup_open:
             self.pause_popup.menu_loop()
             if self.pause_popup.yes_pressed:
-                self.running, self.playing, self.menu_open, self.popup_open = False, False, False, False
+                self.playing, self.menu_open, self.popup_open = False, False, False
             if self.pause_popup.no_pressed:
                 self.popup_open = False
 
