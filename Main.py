@@ -101,12 +101,13 @@ class Game:
     # updates the objects
     def update(self):
         self.projectiles.update()
-        self.walls.update(self.player)
         self.all_sprites.update()
+        self.walls.update(self.player)
 
     # draws the new screen and presents it to the player
     def draw(self):
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
+        self.doors.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
         self.player.draw_hud()
@@ -118,6 +119,7 @@ class Game:
         self.mouse_down = False
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.doors = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
@@ -129,6 +131,8 @@ class Game:
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'Wall':
                 Wall(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
+            if tile_object.name == 'Door':
+                Door(self, tile_object.x, tile_object.y, tile_object.width < tile_object.height, 10)
         self.run()
 
     def run(self):

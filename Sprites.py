@@ -262,3 +262,24 @@ class Projectile(pygame.sprite.Sprite):
         self.y += self.dy * self.speed
         self.rect.x = self.x + self.game.player.camerax
         self.rect.y = self.y + self.game.player.cameray
+        
+
+class Door(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, is_tall, cost):
+        self.game = game
+        self.groups = game.doors, game.walls
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image = pygame.image.load(DOOR_IMAGE)
+        if is_tall:
+            self.image = pygame.transform.rotate(self.image, 90)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.cost = cost
+
+    def update(self, player):
+        self.rect.x = self.x + player.camerax
+        self.rect.y = self.y + player.cameray
+        pygame.sprite.spritecollide(self, self.game.projectiles, True)
+
+

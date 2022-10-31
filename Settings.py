@@ -4,6 +4,7 @@ import pygame.image
 
 WIDTH = 1024
 HEIGHT = 640
+FPS = 60
 
 # menu settings
 START_BUTTON_IMAGES = ["images\\Menu\\Start Button\\start button idle.png", "images\\Menu\\Start Button\\start button hover.png"]
@@ -26,8 +27,10 @@ PLAYER_HEALTH = 1000
 CURRENCY_ON_HIT = 5
 CURRENCY_ON_DEATH = 30
 
-FPS = 60
+
+# tilemap
 TILESIZE = 32
+DOOR_IMAGE = "images\\Tilemap\\Door.png"
 
 # colour RGB values
 RED = (255, 0, 0)
