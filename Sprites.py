@@ -99,6 +99,7 @@ class Player(pygame.sprite.Sprite):
     def draw_hud(self):
         self.draw_health_bar()
         self.draw_currency()
+        self.draw_interact()
 
     def draw_health_bar(self):
         full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
@@ -112,6 +113,35 @@ class Player(pygame.sprite.Sprite):
         currency_rect.topleft = (CURRENCY_X, CURRENCY_Y)
         self.game.win.blit(currency_text, currency_rect)
         pygame.draw.circle(self.game.win, YELLOW, COIN_POS, 7.5)
+
+    def closest_interactable(self):
+        current_door = False
+        for door in self.game.doors:
+            if door.is_interact_distance(self):
+                if not current_door:
+                    current_door = door
+                elif door.distance_to(self) < current_door.distance_to(self):
+                    current_door = door
+        return current_door
+
+    def draw_interact(self):
+        interactable = self.closest_interactable()
+        if interactable:
+            interact_text = self.game.font.render("press E to interact with the {}".format(self.closest_interactable().type), True, WHITE)
+            interact_rect = interact_text.get_rect()
+            interact_rect.midbottom = INTERACT_POS
+            self.game.win.blit(interact_text, interact_rect)
+
+    # finds the closest thing that the player can interact with and interact with it
+    def interact(self):
+        interactable = self.closest_interactable()
+        if interactable.cost:
+            if interactable.cost <= self.currency:
+                interactable.interact()
+                self.currency -= interactable.cost
+            else:
+                # if the player cannot afford the door or chest, the cost text will flash red
+                interactable.is_red = 10
 
     def shoot(self):
         if self.cooldown <= 0:
@@ -262,3 +292,53 @@ class Projectile(pygame.sprite.Sprite):
         self.y += self.dy * self.speed
         self.rect.x = self.x + self.game.player.camerax
         self.rect.y = self.y + self.game.player.cameray
+
+
+class Door(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, is_tall, cost):
+        self.game = game
+        self.groups = game.doors, game.walls
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.image = pygame.image.load(DOOR_IMAGE)
+        if is_tall:
+            self.image = pygame.transform.rotate(self.image, 90)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.cost = cost
+        self.type = "door"
+        self.is_red = 0
+
+    def update(self, player):
+        self.rect.x = self.x + player.camerax
+        self.rect.y = self.y + player.cameray
+        if self.is_red > 0:
+            self.is_red -= 1
+
+    # returns the distance between the player and the door
+    def distance_to(self, sprite):
+        return math.sqrt((sprite.rect.centerx - self.rect.centerx)**2 + (sprite.rect.centery - self.rect.centery)**2)
+
+    # checks if thew player is close enough to the door to interact with it
+    def is_interact_distance(self, player):
+        return True if self.distance_to(player) <= 100 else False
+
+    # shows the price of the door if the player is close enough
+    def draw_price(self, player):
+        player_distance = math.sqrt((player.rect.centerx - self.rect.centerx)**2 + (player.rect.centery - self.rect.centery)**2)
+        if player_distance <= 200:
+            if self.is_red <= 0:
+                text_colour = WHITE
+                coin_colour = YELLOW
+            else:
+                text_colour = RED
+                coin_colour = RED
+            price_text = self.game.font.render("   x {}".format(self.cost), True, text_colour)
+            price_rect = price_text.get_rect()
+            price_rect.bottomleft = self.rect.topleft
+            self.game.win.blit(price_text, price_rect)
+            pygame.draw.circle(self.game.win, coin_colour, (self.rect.x, self.rect.y - 12.5), 7.5)
+
+    # called when the player interacts with the door
+    def interact(self):
+        self.kill()

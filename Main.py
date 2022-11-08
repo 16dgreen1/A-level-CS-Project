@@ -81,6 +81,10 @@ class Game:
                 if self.running:
                     self.running, self.playing = False, False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    self.player.interact()
+
         # making the player shoot whenever the mouse is being clicked
         if pygame.mouse.get_pressed(5)[0]:
             self.player.shoot()
@@ -101,14 +105,17 @@ class Game:
     # updates the objects
     def update(self):
         self.projectiles.update()
-        self.walls.update(self.player)
         self.all_sprites.update()
+        self.walls.update(self.player)
 
     # draws the new screen and presents it to the player
     def draw(self):
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
+        self.doors.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
+        for door in self.doors:
+            door.draw_price(self.player)
         self.player.draw_hud()
 
         # after the screen has been drawn, display it to the player
@@ -118,10 +125,11 @@ class Game:
         self.mouse_down = False
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.doors = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10), Enemy(self, 296, 256, 4, 25, 10), Enemy(self, 336, 256, 4, 25, 10), Enemy(self, 376, 256, 4, 25, 10), Enemy(self, 416, 256, 4, 25, 10), Enemy(self, 360, 1280, 4, 25, 10), Enemy(self, 400, 1280, 4, 25, 10), Enemy(self, 440, 1280, 4, 25, 10), Enemy(self, 480, 1280, 4, 25, 10)]
+        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10), Enemy(self, 320, 1300, 4, 25, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
@@ -129,6 +137,9 @@ class Game:
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'Wall':
                 Wall(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
+            if tile_object.name == 'Door':
+                cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//10)
+                Door(self, tile_object.x, tile_object.y, tile_object.width < tile_object.height, cost)
         self.run()
 
     def run(self):

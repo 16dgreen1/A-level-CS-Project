@@ -571,7 +571,6 @@
   <object id="95" name="Wall" x="1504" y="1696" width="32" height="32"/>
   <object id="97" name="Wall" x="1216" y="2112" width="32" height="32"/>
   <object id="98" name="Wall" x="1568" y="2112" width="32" height="32"/>
-  <object id="99" name="Door" x="800" y="704" width="32" height="64"/>
   <object id="100" name="Door" x="2080" y="1024" width="32" height="64"/>
   <object id="102" name="Door" x="2624" y="864" width="64" height="32"/>
   <object id="103" name="Door" x="1376" y="1824" width="64" height="32"/>
