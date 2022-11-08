@@ -110,6 +110,7 @@ class Game:
 
     # draws the new screen and presents it to the player
     def draw(self):
+        self.win.fill(BACKGROUND_COLOUR)
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.doors.draw(self.win)
         self.all_sprites.draw(self.win)

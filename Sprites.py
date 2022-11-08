@@ -135,7 +135,7 @@ class Player(pygame.sprite.Sprite):
     # finds the closest thing that the player can interact with and interact with it
     def interact(self):
         interactable = self.closest_interactable()
-        if interactable.cost:
+        if interactable:
             if interactable.cost <= self.currency:
                 interactable.interact()
                 self.currency -= interactable.cost
@@ -312,6 +312,7 @@ class Door(pygame.sprite.Sprite):
     def update(self, player):
         self.rect.x = self.x + player.camerax
         self.rect.y = self.y + player.cameray
+        pygame.sprite.spritecollide(self, self.game.projectiles, True)
         if self.is_red > 0:
             self.is_red -= 1
 

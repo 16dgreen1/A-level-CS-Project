@@ -1,6 +1,5 @@
 
 # window settings
-import pygame.image
 
 WIDTH = 1024
 HEIGHT = 640
@@ -41,6 +40,7 @@ YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 DARK_GREY = (50, 50, 50)
+BACKGROUND_COLOUR = (107, 123, 57)
 
 # HUD
 HEALTHBAR_WIDTH = 300
