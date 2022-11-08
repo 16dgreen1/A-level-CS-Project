@@ -262,7 +262,7 @@ class Projectile(pygame.sprite.Sprite):
         self.y += self.dy * self.speed
         self.rect.x = self.x + self.game.player.camerax
         self.rect.y = self.y + self.game.player.cameray
-        
+
 
 class Door(pygame.sprite.Sprite):
     def __init__(self, game, x, y, is_tall, cost):
@@ -280,6 +280,14 @@ class Door(pygame.sprite.Sprite):
     def update(self, player):
         self.rect.x = self.x + player.camerax
         self.rect.y = self.y + player.cameray
+
+    def draw_price(self, player):
+        # shows the price of the door if the player is close enough
         pygame.sprite.spritecollide(self, self.game.projectiles, True)
-
-
+        player_distance = math.sqrt((player.rect.x - self.rect.x)**2 + (player.rect.y - self.rect.y)**2)
+        if player_distance <= 100:
+            price_text = self.game.font.render("   x {}".format(self.cost), True, WHITE)
+            price_rect = price_text.get_rect()
+            price_rect.bottomleft = self.rect.topleft
+            self.game.win.blit(price_text, price_rect)
+            pygame.draw.circle(self.game.win, YELLOW, (self.rect.x, self.rect.y - 12.5), 7.5)

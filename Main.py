@@ -110,6 +110,8 @@ class Game:
         self.doors.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
+        for door in self.doors:
+            door.draw_price(self.player)
         self.player.draw_hud()
 
         # after the screen has been drawn, display it to the player
@@ -123,7 +125,7 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10), Enemy(self, 296, 256, 4, 25, 10), Enemy(self, 336, 256, 4, 25, 10), Enemy(self, 376, 256, 4, 25, 10), Enemy(self, 416, 256, 4, 25, 10), Enemy(self, 360, 1280, 4, 25, 10), Enemy(self, 400, 1280, 4, 25, 10), Enemy(self, 440, 1280, 4, 25, 10), Enemy(self, 480, 1280, 4, 25, 10)]
+        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
