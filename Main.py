@@ -81,6 +81,10 @@ class Game:
                 if self.running:
                     self.running, self.playing = False, False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    self.player.interact()
+
         # making the player shoot whenever the mouse is being clicked
         if pygame.mouse.get_pressed(5)[0]:
             self.player.shoot()
@@ -125,7 +129,7 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
-        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10)]
+        self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10), Enemy(self, 320, 1300, 4, 25, 10)]
         self.projectiles_list = []
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()

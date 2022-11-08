@@ -113,6 +113,23 @@ class Player(pygame.sprite.Sprite):
         self.game.win.blit(currency_text, currency_rect)
         pygame.draw.circle(self.game.win, YELLOW, COIN_POS, 7.5)
 
+    def draw_interact(self):
+        pass
+
+    # finds the closest thing that the player can interact with and interact with it
+    def interact(self):
+        current_door = None
+        for door in self.game.doors:
+            if door.is_interact_distance(self):
+                if current_door == None:
+                    current_door = door
+                elif door.distance_to(self) < current_door.distance_to(self):
+                    current_door = door
+        if current_door:
+            if current_door.cost <= self.currency:
+                current_door.interact()
+                self.currency -= current_door.cost
+
     def shoot(self):
         if self.cooldown <= 0:
             self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 10, 5, 1))
@@ -281,13 +298,22 @@ class Door(pygame.sprite.Sprite):
         self.rect.x = self.x + player.camerax
         self.rect.y = self.y + player.cameray
 
+    def distance_to(self, sprite):
+        return math.sqrt((sprite.rect.centerx - self.rect.centerx)**2 + (sprite.rect.centery - self.rect.centery)**2)
+
+
+    def is_interact_distance(self, player):
+        return True if self.distance_to(player) <= 100 else False
+
     def draw_price(self, player):
         # shows the price of the door if the player is close enough
-        pygame.sprite.spritecollide(self, self.game.projectiles, True)
-        player_distance = math.sqrt((player.rect.x - self.rect.x)**2 + (player.rect.y - self.rect.y)**2)
-        if player_distance <= 100:
+        player_distance = math.sqrt((player.rect.centerx - self.rect.centerx)**2 + (player.rect.centery - self.rect.centery)**2)
+        if player_distance <= 200:
             price_text = self.game.font.render("   x {}".format(self.cost), True, WHITE)
             price_rect = price_text.get_rect()
             price_rect.bottomleft = self.rect.topleft
             self.game.win.blit(price_text, price_rect)
             pygame.draw.circle(self.game.win, YELLOW, (self.rect.x, self.rect.y - 12.5), 7.5)
+
+    def interact(self):
+        self.kill()
