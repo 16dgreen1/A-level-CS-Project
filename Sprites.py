@@ -99,6 +99,7 @@ class Player(pygame.sprite.Sprite):
     def draw_hud(self):
         self.draw_health_bar()
         self.draw_currency()
+        self.draw_interact()
 
     def draw_health_bar(self):
         full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
@@ -113,22 +114,31 @@ class Player(pygame.sprite.Sprite):
         self.game.win.blit(currency_text, currency_rect)
         pygame.draw.circle(self.game.win, YELLOW, COIN_POS, 7.5)
 
-    def draw_interact(self):
-        pass
-
-    # finds the closest thing that the player can interact with and interact with it
-    def interact(self):
-        current_door = None
+    def closest_interactable(self):
+        current_door = False
         for door in self.game.doors:
             if door.is_interact_distance(self):
-                if current_door == None:
+                if not current_door:
                     current_door = door
                 elif door.distance_to(self) < current_door.distance_to(self):
                     current_door = door
-        if current_door:
-            if current_door.cost <= self.currency:
-                current_door.interact()
-                self.currency -= current_door.cost
+        return current_door
+
+    def draw_interact(self):
+        interactable = self.closest_interactable()
+        if interactable:
+            interact_text = self.game.font.render("press E to interact with the {}".format(self.closest_interactable().type), True, WHITE)
+            interact_rect = interact_text.get_rect()
+            interact_rect.midbottom = INTERACT_POS
+            self.game.win.blit(interact_text, interact_rect)
+
+    # finds the closest thing that the player can interact with and interact with it
+    def interact(self):
+        interactable = self.closest_interactable()
+        if interactable:
+            if interactable.cost <= self.currency:
+                interactable.interact()
+                self.currency -= interactable.cost
 
     def shoot(self):
         if self.cooldown <= 0:
@@ -293,6 +303,7 @@ class Door(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.cost = cost
+        self.type = "door"
 
     def update(self, player):
         self.rect.x = self.x + player.camerax
@@ -300,7 +311,6 @@ class Door(pygame.sprite.Sprite):
 
     def distance_to(self, sprite):
         return math.sqrt((sprite.rect.centerx - self.rect.centerx)**2 + (sprite.rect.centery - self.rect.centery)**2)
-
 
     def is_interact_distance(self, player):
         return True if self.distance_to(player) <= 100 else False
