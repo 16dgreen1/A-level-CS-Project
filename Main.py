@@ -134,7 +134,8 @@ class Game:
             if tile_object.name == 'Wall':
                 Wall(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
             if tile_object.name == 'Door':
-                Door(self, tile_object.x, tile_object.y, tile_object.width < tile_object.height, 10)
+                cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//10)
+                Door(self, tile_object.x, tile_object.y, tile_object.width < tile_object.height, cost)
         self.run()
 
     def run(self):
