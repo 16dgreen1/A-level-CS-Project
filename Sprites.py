@@ -12,6 +12,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.image_file
         self.rect = self.image.get_rect()
         self.rect.center = x, y
+        self.spawn = (x, y)
         self.x = x
         self.y = y
         self.rot_angle = 0
@@ -152,6 +153,10 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rotate()
         self.move()
+        if pygame.sprite.spritecollide(self, self.game.out_of_bounds, False):
+            self.x, self.y = self.spawn
+            self.camerax, self.cameray = -self.x + WIDTH / 2, -self.y + HEIGHT / 2
+            print("erm")
         self.cooldown -= 1 if self.cooldown > 0 else 0
         if self.health <= 0:
             self.game.playing = False
@@ -166,10 +171,24 @@ class Wall(pygame.sprite.Sprite):
         self.x = x
         self.y = y
 
-    def update(self, player):
-        self.rect.x = self.x + player.camerax
-        self.rect.y = self.y + player.cameray
+    def update(self):
+        self.rect.x = self.x + self.game.player.camerax
+        self.rect.y = self.y + self.game.player.cameray
         pygame.sprite.spritecollide(self, self.game.projectiles, True)
+
+
+class Bounds(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height, game):
+        self.game = game
+        self.groups = game.out_of_bounds
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.rect = pygame.Rect(x, y, width, height)
+        self.x = x
+        self.y = y
+
+    def update(self):
+        self.rect.x = self.x + self.game.player.camerax
+        self.rect.y = self.y + self.game.player.cameray
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -182,6 +201,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.image_file
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+        self.spawn = (x, y)
         self.position_x = x
         self.position_y = y
         self.speed = speed
@@ -267,8 +287,11 @@ class Enemy(pygame.sprite.Sprite):
         original_pos_x, original_pos_y = self.rect.centerx, self.rect.centery
         self.rotate()
         self.move()
-        self.position_x += self.rect.centerx - original_pos_x
-        self.position_y += self.rect.centery - original_pos_y
+        if pygame.sprite.spritecollide(self, self.game.out_of_bounds, False):
+            self.position_x, self.position_y = self.spawn
+        else:
+            self.position_x += self.rect.centerx - original_pos_x
+            self.position_y += self.rect.centery - original_pos_y
         self.rect.centerx = self.position_x + self.game.player.camerax
         self.rect.centery = self.position_y + self.game.player.cameray
 
@@ -310,9 +333,9 @@ class Door(pygame.sprite.Sprite):
         self.type = "door"
         self.is_red = 0
 
-    def update(self, player):
-        self.rect.x = self.x + player.camerax
-        self.rect.y = self.y + player.cameray
+    def update(self):
+        self.rect.x = self.x + self.game.player.camerax
+        self.rect.y = self.y + self.game.player.cameray
         pygame.sprite.spritecollide(self, self.game.projectiles, True)
         if self.is_red > 0:
             self.is_red -= 1

@@ -106,7 +106,8 @@ class Game:
     def update(self):
         self.projectiles.update()
         self.all_sprites.update()
-        self.walls.update(self.player)
+        self.walls.update()
+        self.out_of_bounds.update()
 
     # draws the new screen and presents it to the player
     def draw(self):
@@ -129,6 +130,7 @@ class Game:
         self.doors = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
+        self.out_of_bounds = pygame.sprite.Group()
         self.player = Player(self, 672, 736)
         self.enemy_list = [Enemy(self, 256, 256, 4, 25, 10), Enemy(self, 320, 1280, 4, 25, 10), Enemy(self, 320, 1300, 4, 25, 10)]
         self.projectiles_list = []
@@ -141,6 +143,8 @@ class Game:
             if tile_object.name == 'Door':
                 cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//10)
                 Door(self, tile_object.x, tile_object.y, tile_object.width < tile_object.height, cost)
+            if tile_object.name == "Out of bounds":
+                Bounds(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
         self.run()
 
     def run(self):
