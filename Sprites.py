@@ -136,12 +136,13 @@ class Player(pygame.sprite.Sprite):
     def interact(self):
         interactable = self.closest_interactable()
         if interactable:
-            if interactable.cost <= self.currency:
-                interactable.interact()
-                self.currency -= interactable.cost
-            else:
-                # if the player cannot afford the door or chest, the cost text will flash red
-                interactable.is_red = 10
+            if interactable.type == "door":
+                if interactable.cost <= self.currency:
+                    interactable.interact()
+                    self.currency -= interactable.cost
+                else:
+                    # if the player cannot afford the door or chest, the cost text will flash red
+                    interactable.is_red = 10
 
     def shoot(self):
         if self.cooldown <= 0:
