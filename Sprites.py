@@ -156,7 +156,6 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, self.game.out_of_bounds, False):
             self.x, self.y = self.spawn
             self.camerax, self.cameray = -self.x + WIDTH / 2, -self.y + HEIGHT / 2
-            print("erm")
         self.cooldown -= 1 if self.cooldown > 0 else 0
         if self.health <= 0:
             self.game.playing = False
