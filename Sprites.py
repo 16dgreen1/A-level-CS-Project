@@ -153,6 +153,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rotate()
         self.move()
+        # move the player back to spawn when they move out of bounds
         if pygame.sprite.spritecollide(self, self.game.out_of_bounds, False):
             self.x, self.y = self.spawn
             self.camerax, self.cameray = -self.x + WIDTH / 2, -self.y + HEIGHT / 2
@@ -286,6 +287,7 @@ class Enemy(pygame.sprite.Sprite):
         original_pos_x, original_pos_y = self.rect.centerx, self.rect.centery
         self.rotate()
         self.move()
+        # teleport the enemy back to spawn when they move out of bounds
         if pygame.sprite.spritecollide(self, self.game.out_of_bounds, False):
             self.position_x, self.position_y = self.spawn
         else:
