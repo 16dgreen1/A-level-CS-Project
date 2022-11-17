@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="128" height="160" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="265">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="128" height="160" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="332">
  <tileset firstgid="1" source="jawbreaker_tiles.tsx"/>
  <layer id="3" name="Grass" width="128" height="160">
   <data encoding="csv">
@@ -582,7 +582,7 @@
   <object id="120" name="Wall" x="3872" y="192" width="32" height="4736"/>
   <object id="122" name="Wall" x="2592" y="2560" width="1280" height="32"/>
   <object id="123" name="Wall" x="224" y="2560" width="2304" height="32"/>
-  <object id="124" name="Door" x="2528" y="2560" width="64" height="32"/>
+  <object id="124" name="Door" type="area b" x="2528" y="2560" width="64" height="32"/>
   <object id="125" name="Wall" x="384" y="2784" width="32" height="32"/>
   <object id="126" name="Wall" x="640" y="3040" width="32" height="32"/>
   <object id="127" name="Wall" x="928" y="3008" width="32" height="32"/>
@@ -692,5 +692,115 @@
   <object id="260" name="Out of bounds" x="0" y="4928" width="4096" height="192"/>
   <object id="262" name="Out of bounds" x="0" y="192" width="192" height="4736"/>
   <object id="263" name="Out of bounds" x="3904" y="192" width="192" height="4736"/>
+ </objectgroup>
+ <objectgroup id="5" name="Enemy spawns">
+  <object id="294" name="spawner" type="A" x="3200" y="640">
+   <point/>
+  </object>
+  <object id="295" name="spawner" type="A" x="3520" y="640">
+   <point/>
+  </object>
+  <object id="296" name="spawner" type="A" x="3520" y="960">
+   <point/>
+  </object>
+  <object id="297" name="spawner" type="A" x="3200" y="960">
+   <point/>
+  </object>
+  <object id="298" name="spawner" type="A" x="3200" y="1600">
+   <point/>
+  </object>
+  <object id="299" name="spawner" type="A" x="3200" y="1280">
+   <point/>
+  </object>
+  <object id="300" name="spawner" type="A" x="3520" y="1280">
+   <point/>
+  </object>
+  <object id="301" name="spawner" type="A" x="3520" y="1600">
+   <point/>
+  </object>
+  <object id="302" name="spawner" type="A" x="3520" y="2240">
+   <point/>
+  </object>
+  <object id="303" name="spawner" type="A" x="3200" y="2240">
+   <point/>
+  </object>
+  <object id="304" name="spawner" type="A" x="3200" y="2400">
+   <point/>
+  </object>
+  <object id="305" name="spawner" type="A" x="3520" y="2400">
+   <point/>
+  </object>
+  <object id="306" name="spawner" type="A" x="320" y="2432">
+   <point/>
+  </object>
+  <object id="307" name="spawner" type="A" x="544" y="2240">
+   <point/>
+  </object>
+  <object id="308" name="spawner" type="A" x="320" y="320">
+   <point/>
+  </object>
+  <object id="309" name="spawner" type="A" x="480" y="480">
+   <point/>
+  </object>
+  <object id="310" name="spawner" type="A" x="480" y="320">
+   <point/>
+  </object>
+  <object id="311" name="spawner" type="A" x="320" y="480">
+   <point/>
+  </object>
+  <object id="314" name="spawner" type="B" x="704" y="2848">
+   <point/>
+  </object>
+  <object id="315" name="spawner" type="B" x="1024" y="3168">
+   <point/>
+  </object>
+  <object id="316" name="spawner" type="B" x="1312" y="2912">
+   <point/>
+  </object>
+  <object id="317" name="spawner" type="B" x="1632" y="3104">
+   <point/>
+  </object>
+  <object id="318" name="spawner" type="B" x="1856" y="3040">
+   <point/>
+  </object>
+  <object id="319" name="spawner" type="B" x="864" y="4736">
+   <point/>
+  </object>
+  <object id="320" name="spawner" type="B" x="1024" y="4768">
+   <point/>
+  </object>
+  <object id="321" name="spawner" type="B" x="1056" y="4704">
+   <point/>
+  </object>
+  <object id="322" name="spawner" type="B" x="2880" y="4704">
+   <point/>
+  </object>
+  <object id="323" name="spawner" type="B" x="2784" y="4704">
+   <point/>
+  </object>
+  <object id="324" name="spawner" type="B" x="2816" y="4608">
+   <point/>
+  </object>
+  <object id="325" name="spawner" type="B" x="1920" y="4736">
+   <point/>
+  </object>
+  <object id="326" name="spawner" type="B" x="1984" y="4704">
+   <point/>
+  </object>
+  <object id="327" name="spawner" type="B" x="3616" y="3936">
+   <point/>
+  </object>
+  <object id="328" name="spawner" type="B" x="3744" y="3904">
+   <point/>
+  </object>
+  <object id="329" name="spawner" type="B" x="3520" y="2816">
+   <point/>
+  </object>
+  <object id="330" name="spawner" type="B" x="3168" y="2976">
+   <point/>
+  </object>
+  <object id="331" name="spawner" type="B" x="3488" y="3264">
+   <point/>
+  </object>
  </objectgroup>
 </map>

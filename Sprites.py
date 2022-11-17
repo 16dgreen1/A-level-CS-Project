@@ -128,7 +128,7 @@ class Player(pygame.sprite.Sprite):
     def draw_interact(self):
         interactable = self.closest_interactable()
         if interactable:
-            interact_text = self.game.font.render("press E to interact with the {}".format(self.closest_interactable().type), True, WHITE)
+            interact_text = self.game.font.render("press E to interact with the {}".format(self.closest_interactable().interact_type), True, WHITE)
             interact_rect = interact_text.get_rect()
             interact_rect.midbottom = INTERACT_POS
             self.game.win.blit(interact_text, interact_rect)
@@ -137,7 +137,7 @@ class Player(pygame.sprite.Sprite):
     def interact(self):
         interactable = self.closest_interactable()
         if interactable:
-            if interactable.type == "door":
+            if interactable.interact_type == "door":
                 if interactable.cost <= self.currency:
                     interactable.interact()
                     self.currency -= interactable.cost
@@ -331,8 +331,9 @@ class Door(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.cost = cost
-        self.type = "door"
+        self.interact_type = "door"
         self.is_red = 0
+        self.closed = True
 
     def update(self):
         self.rect.x = self.x + self.game.player.camerax
@@ -367,4 +368,5 @@ class Door(pygame.sprite.Sprite):
 
     # called when the player interacts with the door
     def interact(self):
+        self.closed = True
         self.kill()
