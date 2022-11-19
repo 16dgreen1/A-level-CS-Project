@@ -211,8 +211,8 @@ class Enemy(pygame.sprite.Sprite):
 
     def move(self):
         hit_player = False
-        dx = math.cos(math.radians(self.rot_angle))
-        dy = -(math.sin(math.radians(self.rot_angle)))
+        dx = math.cos(self.rot_angle)
+        dy = -(math.sin(self.rot_angle))
         self.rect.x += dx * self.speed
         collisions = pygame.sprite.spritecollide(self, self.game.walls, False) + pygame.sprite.spritecollide(self, self.game.all_sprites, False)
         for collision in collisions:
@@ -253,18 +253,18 @@ class Enemy(pygame.sprite.Sprite):
         y = player_pos_y - self.rect.centery
         if x != 0:
             # angle between enemy and player
-            self.rot_angle = math.degrees(math.atan(-y / x))
+            self.rot_angle = math.atan(-y / x)
         else:
             # if the player is directly above or below (divide by 0)
             if player_pos_y < self.rect.y:
-                self.rot_angle = 90
+                self.rot_angle = math.radians(90)
             else:
-                self.rot_angle = -90
+                self.rot_angle = math.radians(-90)
         # if the player is behind the enemy in terms of x
         if player_pos_x < self.rect.centerx:
-            self.rot_angle += 180
+            self.rot_angle += math.radians(180)
         # change the enemy
-        self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
+        self.image = pygame.transform.rotate(self.image_file, math.degrees(self.rot_angle) % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
         self.rotate_collide()
