@@ -78,7 +78,15 @@ class Game:
         if self.area_b_door.closed:
             spawner_list = self.start_spawner_list
         if len(self.enemies) < 20:
-            spawner_list[random.randint(0, len(spawner_list)-1)].spawn()
+            self.pick_spawner(spawner_list).spawn()
+
+    # picks a random point in teh list of enemy spawners and moves through the list from there until it finds one that isn't on the screen
+    @staticmethod
+    def pick_spawner(spawner_list):
+        spawn_index = random.randint(0, len(spawner_list)-1)
+        while spawner_list[spawn_index].is_on_screen():
+            spawn_index = spawn_index + 1 if spawn_index < len(spawner_list) - 1 else 0
+        return spawner_list[spawn_index]
 
     # handles events such as key presses
     def events(self):

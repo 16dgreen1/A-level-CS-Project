@@ -41,6 +41,9 @@ class Spawner:
         self.screen_x = self.x + self.game.player.camerax
         self.screen_y = self.y + self.game.player.cameray
 
+    def is_on_screen(self):
+        return True if 0 < self.screen_x < WIDTH and 0 < self.screen_y < HEIGHT else False
+
     # spawns an enemy at the location of the spawner  game, x, y, speed, damage, health
     def spawn(self):
         Enemy(self.game, self.x, self.y, random.randint(2, 4), random.randint(5, 15), random.randint(7, 13))
