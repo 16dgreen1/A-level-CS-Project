@@ -25,6 +25,7 @@ PLAYER_SPEED = 5
 PLAYER_HEALTH = 1000
 CURRENCY_ON_HIT = 5
 CURRENCY_ON_DEATH = 30
+PLAYER_SPRITES = ['images\\Player\\frame1.png', 'images\\Player\\frame2.png', 'images\\Player\\frame3.png', 'images\\Player\\frame2.png']
 
 # tilemap
 TILESIZE = 32
