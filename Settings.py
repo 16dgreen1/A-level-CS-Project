@@ -43,6 +43,9 @@ CYAN = (0, 255, 255)
 DARK_GREY = (50, 50, 50)
 BACKGROUND_COLOUR = (107, 123, 57)
 
+# enemy settings
+ENEMY_SPRITES = ['images\\Enemy\\frame1.png', 'images\\Enemy\\frame2.png', 'images\\Enemy\\frame3.png', 'images\\Enemy\\frame2.png']
+
 # HUD
 HEALTHBAR_WIDTH = 300
 HEALTHBAR_HEIGHT = 15

@@ -204,8 +204,9 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.groups = game.all_sprites, game.enemies
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png").convert_alpha()  # TODO make an actual sprite for the enemy
-        self.image = self.image_file
+        self.animation_frames = [pygame.image.load(ENEMY_SPRITES[i]).convert_alpha() for i in range(len(ENEMY_SPRITES))]
+        self.current_frame = 0
+        self.image = self.animation_frames[self.current_frame]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.spawn = (x, y)
@@ -214,6 +215,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = speed
         self.damage = damage
         self.health = health
+        self.animation_cooldown = 10
         self.rot_angle = 0
 
     def move(self):
@@ -271,7 +273,12 @@ class Enemy(pygame.sprite.Sprite):
         if player_pos_x < self.rect.centerx:
             self.rot_angle += math.radians(180)
         # change the enemy
-        self.image = pygame.transform.rotate(self.image_file, math.degrees(self.rot_angle) % 360)
+        if self.animation_cooldown <= 0:
+            self.animation_cooldown = 10
+            self.current_frame = self.current_frame + 1 if self.current_frame < len(self.animation_frames) - 1 else 0
+        else:
+            self.animation_cooldown -= 1
+        self.image = pygame.transform.rotate(self.animation_frames[self.current_frame], math.degrees(self.rot_angle) % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
         self.rotate_collide()
