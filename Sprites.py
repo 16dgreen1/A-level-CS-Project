@@ -8,8 +8,9 @@ class Player(pygame.sprite.Sprite):
         self.game = game  # a reference to the game class
         self.groups = self.game.all_sprites  # a reference to the groups they're in
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image_file = pygame.image.load('images\\Player\\test.png').convert_alpha()  # TODO make an actual sprite for the player
-        self.image = self.image_file
+        self.animation_frames = [pygame.image.load(PLAYER_SPRITES[i]).convert_alpha() for i in range(len(PLAYER_SPRITES))]
+        self.current_frame = 0
+        self.image = self.animation_frames[self.current_frame]
         self.rect = self.image.get_rect()
         self.rect.center = x, y
         self.spawn = (x, y)
@@ -21,7 +22,8 @@ class Player(pygame.sprite.Sprite):
         self.camerax = -x + WIDTH / 2
         self.cameray = -y + HEIGHT / 2
         self.health = PLAYER_HEALTH
-        self.cooldown = 0
+        self.gun_cooldown = 0
+        self.animation_cooldown = 10
         self.currency = 0
 
     def rotate(self):
@@ -42,8 +44,13 @@ class Player(pygame.sprite.Sprite):
         # if the mouse is behind the player in terms of x
         if mouse_pos_x < self.rect.centerx:
             self.rot_angle += 180
-        # change the player
-        self.image = pygame.transform.rotate(self.image_file, self.rot_angle % 360)
+        # rotate the sprite and change it if the animation cooldown is 0
+        if self.animation_cooldown <= 0:
+            self.animation_cooldown = 10
+            self.current_frame = self.current_frame + 1 if self.current_frame < len(self.animation_frames) - 1 else 0
+        else:
+            self.animation_cooldown -= 1
+        self.image = pygame.transform.rotate(self.animation_frames[self.current_frame], self.rot_angle % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
         self.rotate_collide()
@@ -146,9 +153,9 @@ class Player(pygame.sprite.Sprite):
                     interactable.is_red = 10
 
     def shoot(self):
-        if self.cooldown <= 0:
+        if self.gun_cooldown <= 0:
             self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 10, 5, 1))
-            self.cooldown = 20
+            self.gun_cooldown = 20
 
     def update(self):
         self.rotate()
@@ -157,7 +164,7 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, self.game.out_of_bounds, False):
             self.x, self.y = self.spawn
             self.camerax, self.cameray = -self.x + WIDTH / 2, -self.y + HEIGHT / 2
-        self.cooldown -= 1 if self.cooldown > 0 else 0
+        self.gun_cooldown -= 1 if self.gun_cooldown > 0 else 0
         if self.health <= 0:
             self.game.playing = False
 
@@ -197,8 +204,9 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.groups = game.all_sprites, game.enemies
         pygame.sprite.Sprite.__init__(self, self.groups)
-        self.image_file = pygame.image.load("images\\Enemy\\Enemy.png").convert_alpha()  # TODO make an actual sprite for the enemy
-        self.image = self.image_file
+        self.animation_frames = [pygame.image.load(ENEMY_SPRITES[i]).convert_alpha() for i in range(len(ENEMY_SPRITES))]
+        self.current_frame = 0
+        self.image = self.animation_frames[self.current_frame]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.spawn = (x, y)
@@ -207,6 +215,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = speed
         self.damage = damage
         self.health = health
+        self.animation_cooldown = 10
         self.rot_angle = 0
 
     def move(self):
@@ -264,7 +273,12 @@ class Enemy(pygame.sprite.Sprite):
         if player_pos_x < self.rect.centerx:
             self.rot_angle += math.radians(180)
         # change the enemy
-        self.image = pygame.transform.rotate(self.image_file, math.degrees(self.rot_angle) % 360)
+        if self.animation_cooldown <= 0:
+            self.animation_cooldown = 10
+            self.current_frame = self.current_frame + 1 if self.current_frame < len(self.animation_frames) - 1 else 0
+        else:
+            self.animation_cooldown -= 1
+        self.image = pygame.transform.rotate(self.animation_frames[self.current_frame], math.degrees(self.rot_angle) % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
         self.rotate_collide()
