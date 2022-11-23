@@ -205,6 +205,7 @@ class Enemy(pygame.sprite.Sprite):
         self.groups = game.all_sprites, game.enemies
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.animation_frames = [pygame.image.load(ENEMY_SPRITES[i]).convert_alpha() for i in range(len(ENEMY_SPRITES))]
+        self.hit_sprite = pygame.image.load(ENEMY_HIT_SPRITE).convert_alpha()
         self.current_frame = 0
         self.image = self.animation_frames[self.current_frame]
         self.rect = self.image.get_rect()
@@ -216,6 +217,7 @@ class Enemy(pygame.sprite.Sprite):
         self.damage = damage
         self.health = health
         self.animation_cooldown = 10
+        self.hit_sprite_duration = 0
         self.rot_angle = 0
 
     def move(self):
@@ -253,6 +255,8 @@ class Enemy(pygame.sprite.Sprite):
                 if self.health <= 0:
                     self.game.player.currency += CURRENCY_ON_DEATH
                     self.kill()
+                else:
+                    self.hit_sprite_duration = 5
 
     def rotate(self):
         original_coords = self.rect.center
@@ -278,7 +282,9 @@ class Enemy(pygame.sprite.Sprite):
             self.current_frame = self.current_frame + 1 if self.current_frame < len(self.animation_frames) - 1 else 0
         else:
             self.animation_cooldown -= 1
-        self.image = pygame.transform.rotate(self.animation_frames[self.current_frame], math.degrees(self.rot_angle) % 360)
+        if self.hit_sprite_duration > 0:
+            self.hit_sprite_duration -= 1
+        self.image = pygame.transform.rotate(self.animation_frames[self.current_frame], math.degrees(self.rot_angle) % 360) if self.hit_sprite_duration <= 0 else pygame.transform.rotate(self.hit_sprite, math.degrees(self.rot_angle) % 360)
         self.rect = self.image.get_rect()
         self.rect.center = original_coords
         self.rotate_collide()

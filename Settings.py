@@ -45,6 +45,7 @@ BACKGROUND_COLOUR = (107, 123, 57)
 
 # enemy settings
 ENEMY_SPRITES = ['images\\Enemy\\frame1.png', 'images\\Enemy\\frame2.png', 'images\\Enemy\\frame3.png', 'images\\Enemy\\frame2.png']
+ENEMY_HIT_SPRITE = 'images\\Enemy\\hit.png'
 
 # HUD
 HEALTHBAR_WIDTH = 300
