@@ -73,21 +73,6 @@ class Game:
             if self.pause_popup.yes_pressed:
                 self.popup_open = False
 
-    def spawn(self):
-        spawner_list = self.spawner_list
-        if self.area_b_door.closed:
-            spawner_list = self.start_spawner_list
-        if len(self.enemies) < 20:
-            self.pick_spawner(spawner_list).spawn()
-
-    # picks a random point in teh list of enemy spawners and moves through the list from there until it finds one that isn't on the screen
-    @staticmethod
-    def pick_spawner(spawner_list):
-        spawn_index = random.randint(0, len(spawner_list)-1)
-        while spawner_list[spawn_index].is_on_screen():
-            spawn_index = spawn_index + 1 if spawn_index < len(spawner_list) - 1 else 0
-        return spawner_list[spawn_index]
-
     # handles events such as key presses
     def events(self):
         for event in pygame.event.get():
@@ -119,7 +104,14 @@ class Game:
 
     # updates the objects
     def update(self):
-        self.spawn()
+        if self.wave_timer > 0:
+            self.wave_timer -= 1
+        else:
+            self.wave += 1
+            self.wave_timer = WAVE_TIME * (WAVE_MULTIPLIER ** self.wave)
+            self.director.points += WAVE_POINTS * (WAVE_MULTIPLIER ** self.wave)
+            self.player.wave_text_time = 140
+        self.director.update()
         self.projectiles.update()
         self.all_sprites.update()
         self.walls.update()
@@ -169,6 +161,10 @@ class Game:
                 if tile_object.type == "A":
                     self.start_spawner_list.append(Spawner(self, tile_object.x, tile_object.y))
                 self.spawner_list.append(Spawner(self, tile_object.x, tile_object.y))
+        self.wave = 0
+        self.wave_timer = 0
+        self.director = Director(self, self.start_spawner_list, self.spawner_list)
+        self.director.points = 0
         self.run()
 
     def run(self):

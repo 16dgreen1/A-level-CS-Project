@@ -46,6 +46,13 @@ BACKGROUND_COLOUR = (107, 123, 57)
 # enemy settings
 ENEMY_SPRITES = ['images\\Enemy\\frame1.png', 'images\\Enemy\\frame2.png', 'images\\Enemy\\frame3.png', 'images\\Enemy\\frame2.png']
 ENEMY_HIT_SPRITE = 'images\\Enemy\\hit.png'
+SPEED_BOUNDS = [1, 2]
+MAX_SPEEDS = [3, 5.5]
+HEALTH_BOUNDS = [90, 150]
+DAMAGE_BOUNDS = [5, 15]
+WAVE_MULTIPLIER = 1.05
+WAVE_TIME = 3600
+WAVE_POINTS = 20
 
 # HUD
 HEALTHBAR_WIDTH = 300
