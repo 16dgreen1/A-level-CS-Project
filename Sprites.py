@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.gun_cooldown = 0
         self.animation_cooldown = 10
         self.currency = 0
+        self.wave_text_time = 0
 
     def rotate(self):
         original_coords = self.rect.center
@@ -108,6 +109,9 @@ class Player(pygame.sprite.Sprite):
         self.draw_health_bar()
         self.draw_currency()
         self.draw_interact()
+        # when a new wave start, flash the new wave on screen to the player
+        if str(self.wave_text_time // 10) in ["13", "12", "9", "8", "5", "4", "1", "0"] and self.wave_text_time > 0:
+            self.draw_wave()
 
     def draw_health_bar(self):
         full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
@@ -121,6 +125,12 @@ class Player(pygame.sprite.Sprite):
         currency_rect.topleft = (CURRENCY_X, CURRENCY_Y)
         self.game.win.blit(currency_text, currency_rect)
         pygame.draw.circle(self.game.win, YELLOW, COIN_POS, 7.5)
+
+    def draw_wave(self):
+        wave_text = self.game.font.render("Wave {}".format(self.game.wave), True, RED)
+        wave_text_rect = wave_text.get_rect()
+        wave_text_rect.center = (WIDTH/2, HEIGHT/2 - 100)
+        self.game.win.blit(wave_text, wave_text_rect)
 
     def closest_interactable(self):
         current_door = False
@@ -154,7 +164,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.gun_cooldown <= 0:
-            self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 10, 5, 1))
+            self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 10, 5, 30))
             self.gun_cooldown = 20
 
     def update(self):
@@ -167,6 +177,8 @@ class Player(pygame.sprite.Sprite):
         self.gun_cooldown -= 1 if self.gun_cooldown > 0 else 0
         if self.health <= 0:
             self.game.playing = False
+        if self.wave_text_time > 0:
+            self.wave_text_time -= 1
 
 
 class Wall(pygame.sprite.Sprite):
