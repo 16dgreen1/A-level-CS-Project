@@ -70,6 +70,10 @@ class Director:
         if self.points > 0:
             self.spawn()
             self.points -= 1
+        for i in self.start_spawners:
+            i.update()
+        for i in self.all_spawners:
+            i.update()
 
     # picks a random point in the list of enemy spawners and moves through the list from there until it finds one that isn't on the screen
     @staticmethod

@@ -400,5 +400,5 @@ class Door(pygame.sprite.Sprite):
 
     # called when the player interacts with the door
     def interact(self):
-        self.closed = True
+        self.closed = False
         self.kill()
