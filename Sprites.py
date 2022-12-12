@@ -164,7 +164,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.gun_cooldown <= 0:
-            self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 10, 5, 30))
+            self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 15, 5, 30))
             self.gun_cooldown = 20
 
     def update(self):
@@ -259,14 +259,16 @@ class Enemy(pygame.sprite.Sprite):
                 if collision == self.game.player and not hit_player:
                     self.game.player.health -= self.damage
                     self.game.player.hit_move(self)
-        bullet_collisions = pygame.sprite.spritecollide(self, self.game.projectiles, True)
+        bullet_collisions = pygame.sprite.spritecollide(self, self.game.projectiles, False)
         if bullet_collisions:
             for bullet in bullet_collisions:
                 self.health -= bullet.damage
                 self.game.player.currency += CURRENCY_ON_HIT
+                bullet.kill()
                 if self.health <= 0:
                     self.game.player.currency += CURRENCY_ON_DEATH
                     self.kill()
+                    break
                 else:
                     self.hit_sprite_duration = 5
 
