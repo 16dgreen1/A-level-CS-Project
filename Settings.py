@@ -60,8 +60,23 @@ WAVE_POINTS = 20
 HEALTHBAR_WIDTH = 300
 HEALTHBAR_HEIGHT = 15
 HEALTHBAR_OFFSET = 25
+RELOAD_X = WIDTH/2 - 40
+RELOAD_Y = HEIGHT/2 - 40
+RELOAD_WIDTH = 80
+RELOAD_HEIGHT = 10
 CURRENCY_X = 43
 CURRENCY_Y = 47
 COIN_POS = (30, 57)
 COIN_RADIUS = 5
 INTERACT_POS = (WIDTH/2, HEIGHT - 100)
+
+# items
+ITEM_SPRITES = {
+    "handgun": "images\\Weapons\\handgun\\sprite.png",
+    "assault rifle": "images\\Weapons\\assault rifle\\sprite.png",
+    "smg": "images\\Weapons\\smg\\sprite.png",
+    "lmg": "images\\Weapons\\lmg\\sprite.png",
+    "revolver": "images\\Weapons\\revolver\\sprite.png",
+    "sniper rifle": "images\\Weapons\\sniper rifle\\sprite.png",
+    "shotgun": "images\\Weapons\\shotgun\\sprite.png"
+}

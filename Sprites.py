@@ -1,10 +1,12 @@
+import random
+
 from Settings import *
 import pygame
 import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, starting_item):
         self.game = game  # a reference to the game class
         self.groups = self.game.all_sprites  # a reference to the groups they're in
         pygame.sprite.Sprite.__init__(self, self.groups)
@@ -26,6 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.animation_cooldown = 10
         self.currency = 0
         self.wave_text_time = 0
+        self.held_item = starting_item
+        self.reload_timer = 0
 
     def rotate(self):
         original_coords = self.rect.center
@@ -109,9 +113,8 @@ class Player(pygame.sprite.Sprite):
         self.draw_health_bar()
         self.draw_currency()
         self.draw_interact()
-        # when a new wave start, flash the new wave on screen to the player
-        if str(self.wave_text_time // 10) in ["13", "12", "9", "8", "5", "4", "1", "0"] and self.wave_text_time > 0:
-            self.draw_wave()
+        self.draw_wave()
+        self.draw_reloading()
 
     def draw_health_bar(self):
         full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
@@ -127,25 +130,44 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.circle(self.game.win, YELLOW, COIN_POS, 7.5)
 
     def draw_wave(self):
-        wave_text = self.game.font.render("Wave {}".format(self.game.wave), True, RED)
-        wave_text_rect = wave_text.get_rect()
-        wave_text_rect.center = (WIDTH/2, HEIGHT/2 - 100)
-        self.game.win.blit(wave_text, wave_text_rect)
+        # when a new wave starts, flash the new wave on screen to the player
+        if str(self.wave_text_time // 10) in ["13", "12", "9", "8", "5", "4", "1", "0"] and self.wave_text_time > 0:
+            wave_text = self.game.font.render("Wave {}".format(self.game.wave), True, RED)
+            wave_text_rect = wave_text.get_rect()
+            wave_text_rect.center = (WIDTH/2, HEIGHT/2 - 100)
+            self.game.win.blit(wave_text, wave_text_rect)
+
+    def draw_reloading(self):
+        if self.reload_timer > 0:
+            full_bar = pygame.Rect(RELOAD_X, RELOAD_Y, RELOAD_WIDTH, RELOAD_HEIGHT)
+            current_bar = pygame.Rect(RELOAD_X, RELOAD_Y, (1-self.reload_timer/self.held_item.reload_time)*RELOAD_WIDTH, RELOAD_HEIGHT)
+            pygame.draw.rect(self.game.win, WHITE, full_bar, width=1)
+            pygame.draw.rect(self.game.win, WHITE, current_bar)
 
     def closest_interactable(self):
-        current_door = False
+        current_interact = False
         for door in self.game.doors:
             if door.is_interact_distance(self):
-                if not current_door:
-                    current_door = door
-                elif door.distance_to(self) < current_door.distance_to(self):
-                    current_door = door
-        return current_door
+                if not current_interact:
+                    current_interact = door
+                elif door.distance_to(self) < current_interact.distance_to(self):
+                    current_interact = door
+        for item in self.game.items:
+            if item.is_interact_distance(self):
+                if not current_interact:
+                    current_interact = item
+                elif item.distance_to(self) < current_interact.distance_to(self):
+                    current_interact = item
+        return current_interact
 
     def draw_interact(self):
         interactable = self.closest_interactable()
         if interactable:
-            interact_text = self.game.font.render("press E to interact with the {}".format(self.closest_interactable().interact_type), True, WHITE)
+            if interactable.interact_type != "weapon":
+                text = "press E to interact with the {}".format(self.closest_interactable().interact_type)
+            else:
+                text = "press E to pick up the {}".format(self.closest_interactable().item.name)
+            interact_text = self.game.font.render(text, True, WHITE)
             interact_rect = interact_text.get_rect()
             interact_rect.midbottom = INTERACT_POS
             self.game.win.blit(interact_text, interact_rect)
@@ -163,9 +185,11 @@ class Player(pygame.sprite.Sprite):
                     interactable.is_red = 10
 
     def shoot(self):
-        if self.gun_cooldown <= 0:
-            self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle, 15, 5, 30))
-            self.gun_cooldown = 20
+        if self.gun_cooldown <= 0 and self.reload_timer <= 0 and self.held_item.clip_ammo > 0:
+            for i in range(self.held_item.bullets_at_once):
+                self.game.projectiles_list.append(Projectile(self.game, WIDTH / 2, HEIGHT / 2, self.rot_angle + random.uniform(-(self.held_item.spread), self.held_item.spread), self.held_item.bullet_speed, 5, self.held_item.damage))
+            self.gun_cooldown = self.held_item.shot_delay
+            self.held_item.clip_ammo -= 1
 
     def update(self):
         self.rotate()
@@ -175,10 +199,14 @@ class Player(pygame.sprite.Sprite):
             self.x, self.y = self.spawn
             self.camerax, self.cameray = -self.x + WIDTH / 2, -self.y + HEIGHT / 2
         self.gun_cooldown -= 1 if self.gun_cooldown > 0 else 0
+        if self.held_item.clip_ammo <= 0 and self.held_item.stored_ammo > 0:
+            self.held_item.clip_ammo = self.held_item.clip_size if self.held_item.stored_ammo > self.held_item.clip_size else self.held_item.stored_ammo
+            self.held_item.stored_ammo -= self.held_item.clip_ammo
+            self.reload_timer = self.held_item.reload_time
+        self.wave_text_time -= 1 if self.wave_text_time > 0 else 0
+        self.reload_timer -= 1 if self.reload_timer > 0 else 0
         if self.health <= 0:
             self.game.playing = False
-        if self.wave_text_time > 0:
-            self.wave_text_time -= 1
 
 
 class Wall(pygame.sprite.Sprite):
