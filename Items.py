@@ -28,6 +28,17 @@ class ItemPlaced(pygame.sprite.Sprite):
     def is_interact_distance(self, player):
         return True if self.distance_to(player) <= 100 else False
 
+    # handles what happens when the player interacts with the item
+    def interact(self):
+        if self.game.player.held_item.stored_ammo + self.game.player.held_item.clip_ammo > 0:
+            item_swap = self.item
+            self.item = self.game.player.held_item
+            self.game.player.held_item = item_swap
+            self.image = self.item.image
+        else:
+            self.game.player.held_item = self.item
+            self.kill()
+
 
 class ItemHeld:
     def __init__(self, database_item, rarity):

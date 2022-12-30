@@ -184,6 +184,9 @@ class Player(pygame.sprite.Sprite):
                     # if the player cannot afford the door or chest, the cost text will flash red
                     interactable.is_red = 10
 
+            if interactable.interact_type == "weapon":
+                interactable.interact()
+
     def shoot(self):
         if self.gun_cooldown <= 0 and self.reload_timer <= 0 and self.held_item.clip_ammo > 0:
             for i in range(self.held_item.bullets_at_once):
