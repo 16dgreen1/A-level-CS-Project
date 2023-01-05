@@ -1,7 +1,9 @@
 import pygame
 import random
+import sqlite3
 from Settings import *
 from Sprites import *
+from Items import *
 from Menu import *
 from tilemap import *
 
@@ -14,6 +16,8 @@ class Game:
         self.win = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("calibri", 24)
+        self.item_connector = sqlite3.connect("item.db")
+        self.item_cursor = self.item_connector.cursor()
 
     def main_menu(self):
         self.buttons = pygame.sprite.Group()
@@ -85,8 +89,12 @@ class Game:
                 if event.key == pygame.K_e:
                     self.player.interact()
 
-        # making the player shoot whenever the mouse is being clicked
-        if pygame.mouse.get_pressed(5)[0]:
+            # making the player shoot if the mouse has been pressed this frame and the gun is not auto
+            if event.type == pygame.MOUSEBUTTONDOWN and self.player.held_item.is_auto == 'False':
+                self.player.shoot()
+
+        # making the player shoot whenever the mouse is being held down if the gun is auto
+        if pygame.mouse.get_pressed(5)[0] and self.player.held_item.is_auto == 'True':
             self.player.shoot()
 
         # player movement
@@ -116,12 +124,14 @@ class Game:
         self.all_sprites.update()
         self.walls.update()
         self.out_of_bounds.update()
+        self.items.update()
 
     # draws the new screen and presents it to the player
     def draw(self):
         self.win.fill(BACKGROUND_COLOUR)
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
         self.doors.draw(self.win)
+        self.items.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
         for door in self.doors:
@@ -139,7 +149,11 @@ class Game:
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.out_of_bounds = pygame.sprite.Group()
-        self.player = Player(self, 672, 736)
+        self.items = pygame.sprite.Group()
+        self.item_cursor.execute("SELECT * FROM items WHERE name='handgun'")
+        self.player = Player(self, 672, 736, ItemHeld(self.item_cursor.fetchall()[0], "common"))
+        self.item_cursor.execute("SELECT * FROM items WHERE name='assault rifle'")
+        ItemPlaced(self, 500, 500, ItemHeld(self.item_cursor.fetchall()[0], "common"))
         self.projectiles_list = []
         self.start_spawner_list = []
         self.spawner_list = []
@@ -150,7 +164,7 @@ class Game:
             if tile_object.name == 'Wall':
                 Wall(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
             if tile_object.name == 'Door':
-                cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//10)
+                cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//5)
                 if tile_object.type == "area b":
                     self.area_b_door = Door(self, tile_object.x, tile_object.y, tile_object.width < tile_object.height, cost)
                 else:
@@ -181,3 +195,4 @@ g.running = True
 while g.running:
     g.main_menu()
     g.new()
+g.item_connector.close()
