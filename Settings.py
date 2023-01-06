@@ -75,7 +75,7 @@ ITEM_SPRITES = {
     "handgun": "images\\Weapons\\handgun\\sprite.png",
     "assault rifle": "images\\Weapons\\assault rifle\\sprite.png",
     "smg": "images\\Weapons\\smg\\sprite.png",
-    "lmg": "images\\Weapons\\chain gun\\sprite.png",
+    "chain gun": "images\\Weapons\\chain gun\\sprite.png",
     "revolver": "images\\Weapons\\revolver\\sprite.png",
     "sniper rifle": "images\\Weapons\\sniper rifle\\sprite.png",
     "shotgun": "images\\Weapons\\shotgun\\sprite.png"

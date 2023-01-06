@@ -152,8 +152,6 @@ class Game:
         self.items = pygame.sprite.Group()
         self.item_cursor.execute("SELECT * FROM items WHERE name='handgun'")
         self.player = Player(self, 672, 736, ItemHeld(self.item_cursor.fetchall()[0], "common"))
-        self.item_cursor.execute("SELECT * FROM items WHERE name='assault rifle'")
-        ItemPlaced(self, 500, 500, ItemHeld(self.item_cursor.fetchall()[0], "common"))
         self.projectiles_list = []
         self.start_spawner_list = []
         self.spawner_list = []
