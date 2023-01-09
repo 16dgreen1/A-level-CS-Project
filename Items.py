@@ -41,7 +41,7 @@ class ItemPlaced(pygame.sprite.Sprite):
 
 
 class ItemHeld:
-    def __init__(self, database_item, rarity):
+    def __init__(self, database_item):
         self.name = database_item[0]
         self.image = pygame.image.load(ITEM_SPRITES[self.name])
         self.damage = database_item[1]
@@ -54,4 +54,3 @@ class ItemHeld:
         self.clip_ammo = self.clip_size
         self.stored_ammo = database_item[8] - self.clip_ammo
         self.reload_time = database_item[9]
-        self.rarity = rarity

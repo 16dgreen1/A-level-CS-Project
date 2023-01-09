@@ -151,7 +151,7 @@ class Game:
         self.out_of_bounds = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
         self.item_cursor.execute("SELECT * FROM items WHERE name='handgun'")
-        self.player = Player(self, 672, 736, ItemHeld(self.item_cursor.fetchall()[0], "common"))
+        self.player = Player(self, 672, 736, ItemHeld(self.item_cursor.fetchall()[0]))
         self.projectiles_list = []
         self.start_spawner_list = []
         self.spawner_list = []
