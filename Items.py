@@ -44,6 +44,7 @@ class ItemHeld:
     def __init__(self, database_item):
         self.name = database_item[0]
         self.image = pygame.image.load(ITEM_SPRITES[self.name])
+        self.ammo_image = pygame.image.load(AMMO_SPRITES[self.name])
         self.damage = database_item[1]
         self.shot_delay = database_item[2]
         self.spread = database_item[3]

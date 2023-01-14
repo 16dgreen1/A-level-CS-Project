@@ -69,6 +69,9 @@ CURRENCY_Y = 47
 COIN_POS = (30, 57)
 COIN_RADIUS = 5
 INTERACT_POS = (WIDTH/2, HEIGHT - 100)
+ITEM_BORDER_HEIGHT = 100
+ITEM_BORDER_WIDTH = 160
+ITEM_BORDER_OFFSET_X = 60
 
 # items
 ITEM_SPRITES = {
@@ -79,4 +82,13 @@ ITEM_SPRITES = {
     "revolver": "images\\Weapons\\revolver\\sprite.png",
     "sniper rifle": "images\\Weapons\\sniper rifle\\sprite.png",
     "shotgun": "images\\Weapons\\shotgun\\sprite.png"
+}
+AMMO_SPRITES = {
+    "handgun": "images\\Weapons\\handgun\\ammo.png",
+    "assault rifle": "images\\Weapons\\assault rifle\\ammo.png",
+    "smg": "images\\Weapons\\smg\\ammo.png",
+    "chain gun": "images\\Weapons\\chain gun\\ammo.png",
+    "revolver": "images\\Weapons\\revolver\\ammo.png",
+    "sniper rifle": "images\\Weapons\\sniper rifle\\ammo.png",
+    "shotgun": "images\\Weapons\\shotgun\\ammo.png"
 }
