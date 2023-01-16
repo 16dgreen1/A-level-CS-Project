@@ -511,7 +511,7 @@ class Chest(pygame.sprite.Sprite):
         x = [0, 1, 0, -1]
         y = [-1, 0, 1, 0]
         self.game.item_cursor.execute("SELECT * FROM items WHERE name='{}'".format(random.choice(ITEMS)))
-        ItemPlaced(self.game, self.x + (x[self.direction] - 0.5) * TILESIZE, self.y + (y[self.direction] + 0.5) * TILESIZE, ItemHeld(self.game.item_cursor.fetchall()[0]))
+        ItemPlaced(self.game, self.x + (x[self.direction] - 0.5) * TILESIZE, self.y + (y[self.direction] - 0.5) * TILESIZE, ItemHeld(self.game.item_cursor.fetchall()[0]))
 
 
 
