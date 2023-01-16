@@ -115,6 +115,7 @@ class Player(pygame.sprite.Sprite):
         self.draw_interact()
         self.draw_wave()
         self.draw_reloading()
+        self.draw_item()
 
     def draw_health_bar(self):
         full_bar = pygame.Rect(HEALTHBAR_OFFSET, HEALTHBAR_OFFSET, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT)
@@ -143,6 +144,25 @@ class Player(pygame.sprite.Sprite):
             current_bar = pygame.Rect(RELOAD_X, RELOAD_Y, (1-self.reload_timer/self.held_item.reload_time)*RELOAD_WIDTH, RELOAD_HEIGHT)
             pygame.draw.rect(self.game.win, WHITE, full_bar, width=1)
             pygame.draw.rect(self.game.win, WHITE, current_bar)
+
+    # show what item the player has in the bottom corner as well as the current ammo
+    def draw_item(self):
+        item_border = pygame.Rect(WIDTH - ITEM_BORDER_WIDTH - ITEM_BORDER_OFFSET_X, HEIGHT - ITEM_BORDER_HEIGHT, ITEM_BORDER_WIDTH, ITEM_BORDER_HEIGHT)
+        pygame.draw.rect(self.game.win, WHITE, item_border, width=2)
+        item_image = pygame.transform.scale2x(self.held_item.image)
+        item_image_rect = item_image.get_rect()
+        item_image_rect.center = (WIDTH - ITEM_BORDER_OFFSET_X - ITEM_BORDER_WIDTH/2, HEIGHT - ITEM_BORDER_HEIGHT/2)
+        self.game.win.blit(item_image, item_image_rect)
+        ammo_text = self.game.font.render(str(self.held_item.stored_ammo), True, WHITE)
+        ammo_text_rect = ammo_text.get_rect()
+        ammo_text_rect.bottomright = (WIDTH - ITEM_BORDER_OFFSET_X - 10, HEIGHT - 10)
+        self.game.win.blit(ammo_text, ammo_text_rect)
+        ammo_image = self.held_item.ammo_image
+        ammo_image_rect = ammo_image.get_rect()
+        if self.reload_timer <= 0:
+            for i in range(self.held_item.clip_ammo):
+                ammo_image_rect.midbottom = (WIDTH - ITEM_BORDER_OFFSET_X/2, HEIGHT - i*ammo_image_rect.height)
+                self.game.win.blit(ammo_image, ammo_image_rect)
 
     def closest_interactable(self):
         current_interact = False
