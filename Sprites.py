@@ -1,6 +1,6 @@
 import random
-
 from Settings import *
+from Items import *
 import pygame
 import math
 
@@ -166,12 +166,13 @@ class Player(pygame.sprite.Sprite):
 
     def closest_interactable(self):
         current_interact = False
-        for door in self.game.doors:
-            if door.is_interact_distance(self):
+        for obstacle in self.game.interactable_obstacles:
+            # checks if the obstacle is within the interact distance and if it is closed
+            if obstacle.is_interact_distance(self) and obstacle.closed:
                 if not current_interact:
-                    current_interact = door
-                elif door.distance_to(self) < current_interact.distance_to(self):
-                    current_interact = door
+                    current_interact = obstacle
+                elif obstacle.distance_to(self) < current_interact.distance_to(self):
+                    current_interact = obstacle
         for item in self.game.items:
             if item.is_interact_distance(self):
                 if not current_interact:
@@ -196,7 +197,7 @@ class Player(pygame.sprite.Sprite):
     def interact(self):
         interactable = self.closest_interactable()
         if interactable:
-            if interactable.interact_type == "door":
+            if interactable.interact_type in ["door", "chest"]:
                 if interactable.cost <= self.currency:
                     interactable.interact()
                     self.currency -= interactable.cost
@@ -407,7 +408,7 @@ class Projectile(pygame.sprite.Sprite):
 class Door(pygame.sprite.Sprite):
     def __init__(self, game, x, y, is_tall, cost):
         self.game = game
-        self.groups = game.doors, game.walls
+        self.groups = game.interactable_obstacles, game.walls
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.image = pygame.image.load(DOOR_IMAGE)
         if is_tall:
@@ -455,3 +456,63 @@ class Door(pygame.sprite.Sprite):
     def interact(self):
         self.closed = False
         self.kill()
+
+
+class Chest(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, direction, cost):
+        self.game = game
+        self.groups = game.interactable_obstacles, game.walls
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        # the direction will be 0 = down and then each number afterwards is 90 degrees clockwise from the last
+        self.direction = direction
+        self.image = pygame.transform.rotate(pygame.image.load(CHEST_CLOSED_IMAGE), 90*direction)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.cost = cost
+        self.interact_type = "chest"
+        self.is_red = 0
+        self.closed = True
+
+    # returns the distance between a given sprite and the chest
+    def distance_to(self, sprite):
+        return math.sqrt((sprite.rect.centerx - self.rect.centerx) ** 2 + (sprite.rect.centery - self.rect.centery) ** 2)
+
+    # checks if thew player is close enough to the door to interact with it
+    def is_interact_distance(self, player):
+        return True if self.distance_to(player) <= 100 else False
+
+    # shows the price of the door if the player is close enough
+    def draw_price(self, player):
+        player_distance = self.distance_to(player)
+        if player_distance <= 200:
+            if self.is_red <= 0:
+                text_colour = WHITE
+                coin_colour = YELLOW
+            else:
+                text_colour = RED
+                coin_colour = RED
+            price_text = self.game.font.render("   x {}".format(self.cost), True, text_colour)
+            price_rect = price_text.get_rect()
+            price_rect.bottomleft = self.rect.topleft
+            self.game.win.blit(price_text, price_rect)
+            pygame.draw.circle(self.game.win, coin_colour, (self.rect.x, self.rect.y - 12.5), 7.5)
+
+    def update(self):
+        self.rect.centerx = self.x + self.game.player.camerax
+        self.rect.centery = self.y + self.game.player.cameray
+        pygame.sprite.spritecollide(self, self.game.projectiles, True)
+        if self.is_red > 0:
+            self.is_red -= 1
+
+    def interact(self):
+        self.closed = False
+        self.image = pygame.transform.rotate(pygame.image.load(CHEST_OPEN_IMAGE), 90*self.direction)
+        x = [0, 1, 0, -1]
+        y = [-1, 0, 1, 0]
+        self.game.item_cursor.execute("SELECT * FROM items WHERE name='{}'".format(random.choice(ITEMS)))
+        ItemPlaced(self.game, self.x + (x[self.direction] - 0.5) * TILESIZE, self.y + (y[self.direction] + 0.5) * TILESIZE, ItemHeld(self.game.item_cursor.fetchall()[0]))
+
+
+
+

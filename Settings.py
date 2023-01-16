@@ -30,6 +30,9 @@ PLAYER_SPRITES = ['images\\Player\\frame1.png', 'images\\Player\\frame2.png', 'i
 # tilemap
 TILESIZE = 32
 DOOR_IMAGE = "images\\Tilemap\\Door.png"
+CHEST_CLOSED_IMAGE = "images\\Tilemap\\chest_closed.png"
+CHEST_OPEN_IMAGE = "images\\Tilemap\\chest_open.png"
+ITEMS = []
 
 # colour RGB values
 RED = (255, 0, 0)
@@ -74,6 +77,7 @@ ITEM_BORDER_WIDTH = 160
 ITEM_BORDER_OFFSET_X = 60
 
 # items
+ITEMS = ["handgun", "assault rifle", "smg", "chain gun", "revolver", "sniper rifle", "shotgun"]
 ITEM_SPRITES = {
     "handgun": "images\\Weapons\\handgun\\sprite.png",
     "assault rifle": "images\\Weapons\\assault rifle\\sprite.png",

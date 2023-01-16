@@ -130,11 +130,11 @@ class Game:
     def draw(self):
         self.win.fill(BACKGROUND_COLOUR)
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
-        self.doors.draw(self.win)
+        self.interactable_obstacles.draw(self.win)
         self.items.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
-        for door in self.doors:
+        for door in self.interactable_obstacles:
             door.draw_price(self.player)
         self.player.draw_hud()
 
@@ -145,7 +145,7 @@ class Game:
         self.mouse_down = False
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        self.doors = pygame.sprite.Group()
+        self.interactable_obstacles = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.out_of_bounds = pygame.sprite.Group()
@@ -173,6 +173,9 @@ class Game:
                 if tile_object.type == "A":
                     self.start_spawner_list.append(Spawner(self, tile_object.x, tile_object.y))
                 self.spawner_list.append(Spawner(self, tile_object.x, tile_object.y))
+            if tile_object.name == "Chest":
+                cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//2)
+                Chest(self, tile_object.x + TILESIZE/2, tile_object.y + TILESIZE/2, int(tile_object.type), cost)
         self.wave = 0
         self.wave_timer = 0
         self.director = Director(self, self.start_spawner_list, self.spawner_list)
