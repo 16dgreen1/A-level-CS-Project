@@ -130,11 +130,11 @@ class Game:
     def draw(self):
         self.win.fill(BACKGROUND_COLOUR)
         self.win.blit(self.map_image, (self.player.camerax, self.player.cameray))
-        self.doors.draw(self.win)
+        self.interactable_obstacles.draw(self.win)
         self.items.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
-        for door in self.doors:
+        for door in self.interactable_obstacles:
             door.draw_price(self.player)
         self.player.draw_hud()
 
@@ -145,7 +145,7 @@ class Game:
         self.mouse_down = False
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        self.doors = pygame.sprite.Group()
+        self.interactable_obstacles = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
         self.out_of_bounds = pygame.sprite.Group()
@@ -158,6 +158,7 @@ class Game:
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
         self.map_rect = self.map_image.get_rect()
+        Chest(self, 500, 500, 0, 0)
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'Wall':
                 Wall(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
