@@ -158,7 +158,6 @@ class Game:
         self.map = Tilemap('images\\Tilemap\\map1.tmx')
         self.map_image = self.map.make_map()
         self.map_rect = self.map_image.get_rect()
-        Chest(self, 500, 500, 0, 0)
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'Wall':
                 Wall(tile_object.x, tile_object.y, tile_object.width, tile_object.height, self)
@@ -174,6 +173,9 @@ class Game:
                 if tile_object.type == "A":
                     self.start_spawner_list.append(Spawner(self, tile_object.x, tile_object.y))
                 self.spawner_list.append(Spawner(self, tile_object.x, tile_object.y))
+            if tile_object.name == "Chest":
+                cost = int(math.sqrt((tile_object.x)**2 + (tile_object.y)**2)//2)
+                Chest(self, tile_object.x + TILESIZE/2, tile_object.y + TILESIZE/2, int(tile_object.type), cost)
         self.wave = 0
         self.wave_timer = 0
         self.director = Director(self, self.start_spawner_list, self.spawner_list)

@@ -166,12 +166,13 @@ class Player(pygame.sprite.Sprite):
 
     def closest_interactable(self):
         current_interact = False
-        for door in self.game.interactable_obstacles:
-            if door.is_interact_distance(self):
+        for obstacle in self.game.interactable_obstacles:
+            # checks if the obstacle is within the interact distance and if it is closed
+            if obstacle.is_interact_distance(self) and obstacle.closed:
                 if not current_interact:
-                    current_interact = door
-                elif door.distance_to(self) < current_interact.distance_to(self):
-                    current_interact = door
+                    current_interact = obstacle
+                elif obstacle.distance_to(self) < current_interact.distance_to(self):
+                    current_interact = obstacle
         for item in self.game.items:
             if item.is_interact_distance(self):
                 if not current_interact:
@@ -506,8 +507,9 @@ class Chest(pygame.sprite.Sprite):
 
     def interact(self):
         self.closed = False
-        x = [0, -1, 0, 1]
-        y = [1, 0, -1, 0]
+        self.image = pygame.transform.rotate(pygame.image.load(CHEST_OPEN_IMAGE), 90*self.direction)
+        x = [0, 1, 0, -1]
+        y = [-1, 0, 1, 0]
         self.game.item_cursor.execute("SELECT * FROM items WHERE name='{}'".format(random.choice(ITEMS)))
         ItemPlaced(self.game, self.x + (x[self.direction] - 0.5) * TILESIZE, self.y + (y[self.direction] + 0.5) * TILESIZE, ItemHeld(self.game.item_cursor.fetchall()[0]))
 
