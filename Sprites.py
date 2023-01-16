@@ -147,7 +147,7 @@ class Player(pygame.sprite.Sprite):
 
     # show what item the player has in the bottom corner as well as the current ammo
     def draw_item(self):
-        item_border = pygame.Rect(WIDTH - ITEM_BORDER_WIDTH - ITEM_BORDER_OFFSET_X, HEIGHT - ITEM_BORDER_HEIGHT , ITEM_BORDER_WIDTH, ITEM_BORDER_HEIGHT)
+        item_border = pygame.Rect(WIDTH - ITEM_BORDER_WIDTH - ITEM_BORDER_OFFSET_X, HEIGHT - ITEM_BORDER_HEIGHT, ITEM_BORDER_WIDTH, ITEM_BORDER_HEIGHT)
         pygame.draw.rect(self.game.win, WHITE, item_border, width=2)
         item_image = pygame.transform.scale2x(self.held_item.image)
         item_image_rect = item_image.get_rect()
