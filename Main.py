@@ -134,8 +134,8 @@ class Game:
         self.items.draw(self.win)
         self.all_sprites.draw(self.win)
         self.projectiles.draw(self.win)
-        for door in self.interactable_obstacles:
-            door.draw_price(self.player)
+        for interactable in self.interactable_obstacles:
+            interactable.draw_price(self.player)
         self.player.draw_hud()
 
         # after the screen has been drawn, display it to the player
