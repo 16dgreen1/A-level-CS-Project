@@ -484,19 +484,20 @@ class Chest(pygame.sprite.Sprite):
 
     # shows the price of the door if the player is close enough
     def draw_price(self, player):
-        player_distance = self.distance_to(player)
-        if player_distance <= 200:
-            if self.is_red <= 0:
-                text_colour = WHITE
-                coin_colour = YELLOW
-            else:
-                text_colour = RED
-                coin_colour = RED
-            price_text = self.game.font.render("   x {}".format(self.cost), True, text_colour)
-            price_rect = price_text.get_rect()
-            price_rect.bottomleft = self.rect.topleft
-            self.game.win.blit(price_text, price_rect)
-            pygame.draw.circle(self.game.win, coin_colour, (self.rect.x, self.rect.y - 12.5), 7.5)
+        if self.closed:
+            player_distance = self.distance_to(player)
+            if player_distance <= 200:
+                if self.is_red <= 0:
+                    text_colour = WHITE
+                    coin_colour = YELLOW
+                else:
+                    text_colour = RED
+                    coin_colour = RED
+                price_text = self.game.font.render("   x {}".format(self.cost), True, text_colour)
+                price_rect = price_text.get_rect()
+                price_rect.bottomleft = self.rect.topleft
+                self.game.win.blit(price_text, price_rect)
+                pygame.draw.circle(self.game.win, coin_colour, (self.rect.x, self.rect.y - 12.5), 7.5)
 
     def update(self):
         self.rect.centerx = self.x + self.game.player.camerax
