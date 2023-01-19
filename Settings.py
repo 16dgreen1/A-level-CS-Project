@@ -1,24 +1,33 @@
+import pygame
 
 # window settings
 
-WIDTH = 1024
-HEIGHT = 640
+WIDTH = 1920
+HEIGHT = 1080
 FPS = 60
 
 # menu settings
 START_BUTTON_IMAGES = ["images\\Menu\\Start Button\\start button idle.png", "images\\Menu\\Start Button\\start button hover.png"]
-START_BUTTON_POS = (WIDTH/2, 320)
+START_BUTTON_POS = (WIDTH/2, HEIGHT/2 - 150)
+SCORE_BUTTON_IMAGES = ["images\\Menu\\Score Button\\score button idle.png", "images\\Menu\\Score Button\\score button hover.png"]
+SCORE_BUTTON_POS = (WIDTH/2, HEIGHT/2)
 MAIN_QUIT_BUTTON_IMAGES = ["images\\Menu\\Quit Button\\quit button idle.png", "images\\Menu\\Quit Button\\quit button hover.png"]
-MAIN_QUIT_BUTTON_POS = (WIDTH / 2, 470)
+MAIN_QUIT_BUTTON_POS = (WIDTH/2, HEIGHT/2 + 150)
+CLOSE_BUTTON_IMAGES = ["images\\Menu\\Close Button\\close button idle.png", "images\\Menu\\Close Button\\close button hover.png"]
+CLOSE_BUTTON_POS = (WIDTH/2, HEIGHT-75)
+SCOREBOARD_OFFSET_X = 100
+SCOREBOARD_OFFSET_Y = 100
+CONTINUE_BUTTON_IMAGES = ["images\\Menu\\Continue Button\\continue button idle.png", "images\\Menu\\Continue Button\\continue button hover.png"]
+CONTINUE_BUTTON_POS = (WIDTH/2, HEIGHT/2 + 300)
 NO_BUTTON_IMAGES = ["images\\Menu\\Quit popup\\No button\\no button idle.png", "images\\Menu\\Quit popup\\No button\\no button hover.png"]
 YES_BUTTON_IMAGES = ["images\\Menu\\Quit popup\\Yes button\\yes button idle.png", "images\\Menu\\Quit popup\\Yes button\\yes button hover.png"]
 RESUME_BUTTON_IMAGES = ["images\\Menu\\Pause popup\\Quit button\\quit button idle.png", "images\\Menu\\Pause popup\\Quit button\\quit button hover.png"]
 POPUP_QUIT_BUTTON_IMAGES = ["images\\Menu\\Pause popup\\Resume button\\resume button idle.png", "images\\Menu\\Pause popup\\Resume button\\resume button hover.png"]
 POPUP_HEIGHT = 200
 POPUP_WIDTH = 440
-POPUP_TEXT_POS = (WIDTH/2, 260)
-YES_BUTTON_POS = (387, 370)
-NO_BUTTON_POS = (637, 370)
+POPUP_TEXT_POS = (WIDTH/2, HEIGHT/2 - 60)
+YES_BUTTON_POS = (WIDTH/2 - 125, HEIGHT/2 + 50)
+NO_BUTTON_POS = (WIDTH/2 + 125, HEIGHT/2 + 50)
 
 # player settings
 PLAYER_SPEED = 5
