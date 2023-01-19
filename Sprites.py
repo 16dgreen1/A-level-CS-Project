@@ -6,7 +6,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, starting_item):
+    def __init__(self, game, x, y, starting_item, name):
         self.game = game  # a reference to the game class
         self.groups = self.game.all_sprites  # a reference to the groups they're in
         pygame.sprite.Sprite.__init__(self, self.groups)
@@ -30,6 +30,8 @@ class Player(pygame.sprite.Sprite):
         self.wave_text_time = 0
         self.held_item = starting_item
         self.reload_timer = 0
+        self.score = 0
+        self.name = name
 
     def rotate(self):
         original_coords = self.rect.center
@@ -319,6 +321,7 @@ class Enemy(pygame.sprite.Sprite):
                 bullet.kill()
                 if self.health <= 0:
                     self.game.player.currency += CURRENCY_ON_DEATH
+                    self.game.player.score += 1
                     self.kill()
                     break
                 else:
@@ -510,7 +513,7 @@ class Chest(pygame.sprite.Sprite):
         self.closed = False
         self.image = pygame.transform.rotate(pygame.image.load(CHEST_OPEN_IMAGE), 90*self.direction)
         x = [0, 1, 0, -1]
-        y = [-1, 0, 1, 0]
+        y = [1, 0, -1, 0]
         self.game.item_cursor.execute("SELECT * FROM items WHERE name='{}'".format(random.choice(ITEMS)))
         ItemPlaced(self.game, self.x + (x[self.direction] - 0.5) * TILESIZE, self.y + (y[self.direction] - 0.5) * TILESIZE, ItemHeld(self.game.item_cursor.fetchall()[0]))
 
