@@ -77,11 +77,14 @@ class Game:
                 self.popup_open = False
 
     def score_menu(self):
+        # draw the player's names on the scoreboard
         self.score_cursor.execute("SELECT name FROM scores ORDER BY score DESC LIMIT 10")
         names = [i[0] for i in self.score_cursor.fetchall()]
         self.player_text_images = [self.score_font.render("Player:", True, WHITE)]
         self.player_text_rects = [self.player_text_images[0].get_rect()]
         self.player_text_rects[0].topleft = (SCOREBOARD_OFFSET_X, SCOREBOARD_OFFSET_Y)
+
+        # finds the longest name to put the scores next to so that the scores do not overlap the names
         highest_x = self.player_text_rects[0].right
         for i in range(1, 11):
             self.player_text_images.append(self.score_font.render("{}: {}".format(i, names[i-1]), True, WHITE))
@@ -90,6 +93,7 @@ class Game:
             if self.player_text_rects[i].right > highest_x:
                 highest_x = self.player_text_rects[i].right
 
+        # draw the scores on the scoreboard next to the player names
         self.score_cursor.execute("SELECT score FROM scores ORDER BY score DESC LIMIT 10")
         scores = [i[0] for i in self.score_cursor.fetchall()]
         self.score_text_images = [self.score_font.render("Score:", True, WHITE)]
@@ -100,6 +104,7 @@ class Game:
             self.score_text_rects.append(self.score_text_images[i].get_rect())
             self.score_text_rects[i].topleft = (highest_x + 75, SCOREBOARD_OFFSET_Y + 65*i)
 
+        # setup and start the game loop
         self.win.fill(BLACK)
         pygame.display.flip()
         self.score_buttons = pygame.sprite.Group()
