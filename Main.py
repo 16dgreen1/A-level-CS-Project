@@ -158,7 +158,7 @@ class Game:
                     self.running, self.name_open = False, False
             if event.type == pygame.MOUSEBUTTONUP:
                 if self.continue_button.is_hover():
-                    self.player_name = self.typed_name
+                    self.player_name = self.typed_name if self.typed_name else ' '
                     self.name_open = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
