@@ -314,5 +314,6 @@ g = Game()
 g.running = True
 while g.running:
     g.main_menu()
-    g.new()
+    if g.running:
+        g.new()
 g.item_connector.close()
